@@ -1,0 +1,440 @@
+[gd_scene load_steps=31 format=3 uid="uid://riq4laevjead"]
+
+[ext_resource type="Texture2D" uid="uid://ba2nbhxhnwyq1" path="res://src/img/ui/hud_red.png" id="1_hkxht"]
+[ext_resource type="Texture2D" uid="uid://bijpx3gkq538q" path="res://src/img/maps/other/training.png" id="1_jl6ye"]
+[ext_resource type="Script" path="res://option_state.gd" id="2_iwrv4"]
+[ext_resource type="Script" path="res://gridConstructor.gd" id="3_7s8gg"]
+[ext_resource type="Texture2D" uid="uid://drmmg1lii13pt" path="res://src/img/ui/icons/approved.png" id="3_xsa4e"]
+[ext_resource type="Texture2D" uid="uid://cxecupc30mgwe" path="res://src/img/ui/media/play.png" id="4_62kyf"]
+[ext_resource type="Texture2D" uid="uid://betinmmbh5fvx" path="res://src/img/ui/icons/deny.png" id="4_ii4xe"]
+[ext_resource type="Texture2D" uid="uid://bh6a8eiafhe7f" path="res://src/img/ui/hud_playback.png" id="4_t0102"]
+[ext_resource type="Texture2D" uid="uid://bvqqpndv4h0ww" path="res://src/img/ui/media/pause.png" id="4_yxqtb"]
+[ext_resource type="Texture2D" uid="uid://cymsgc0ly1hyh" path="res://empty.png" id="5_ar5f4"]
+[ext_resource type="Texture2D" uid="uid://dpaxsbttvcij5" path="res://src/img/ui/media/backward.png" id="6_od1gn"]
+[ext_resource type="Texture2D" uid="uid://b6p5f02xqbc7g" path="res://src/img/ui/media/speedDown.png" id="7_syt74"]
+[ext_resource type="Texture2D" uid="uid://c3kx46si0ib56" path="res://src/img/ui/media/stop.png" id="8_pppan"]
+[ext_resource type="Texture2D" uid="uid://ck5upol1f0uly" path="res://src/img/ui/media/speedUp.png" id="9_mcv0w"]
+[ext_resource type="Texture2D" uid="uid://c24txe51g7ftf" path="res://src/img/ui/icons/volume.png" id="10_28h1o"]
+[ext_resource type="Texture2D" uid="uid://eq43idq470w6" path="res://src/img/ui/media/forward.png" id="10_piqh3"]
+[ext_resource type="Texture2D" uid="uid://o40ykr6wwuog" path="res://src/img/ui/icons/arrowBack.png" id="18_18na3"]
+[ext_resource type="Texture2D" uid="uid://dhbkdfrhxn2ne" path="res://src/img/ui/icons/Overlay.png" id="19_d38sv"]
+
+[sub_resource type="Theme" id="Theme_58ylk"]
+OptionButton/constants/h_separation = 0
+OptionButton/icons/arrow = ExtResource("5_ar5f4")
+PopupMenu/icons/radio_checked = null
+PopupMenu/icons/radio_checked_disabled = null
+PopupMenu/icons/radio_unchecked = null
+PopupMenu/icons/radio_unchecked_disabled = null
+PopupMenu/styles/panel = null
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_usjlg"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+draw_center = false
+
+[sub_resource type="Theme" id="Theme_30bft"]
+OptionButton/constants/outline_size = 1
+OptionButton/icons/arrow = ExtResource("5_ar5f4")
+OptionButton/styles/focus = SubResource("StyleBoxFlat_usjlg")
+PopupMenu/constants/indent = 0
+PopupMenu/font_sizes/font_separator_size = 16
+PopupMenu/icons/radio_checked = null
+PopupMenu/icons/radio_checked_disabled = null
+PopupMenu/icons/radio_unchecked = null
+PopupMenu/icons/radio_unchecked_disabled = null
+
+[sub_resource type="Theme" id="Theme_c3nfq"]
+CheckBox/icons/checked = ExtResource("3_xsa4e")
+CheckBox/icons/unchecked = ExtResource("4_ii4xe")
+CheckBox/styles/focus = SubResource("StyleBoxFlat_usjlg")
+
+[sub_resource type="LabelSettings" id="LabelSettings_3ybju"]
+font_size = 14
+
+[sub_resource type="Theme" id="Theme_xxvtp"]
+Button/styles/focus = SubResource("StyleBoxFlat_usjlg")
+
+[sub_resource type="InputEventKey" id="InputEventKey_0rx5u"]
+device = -1
+physical_keycode = 77
+unicode = 109
+
+[sub_resource type="Shortcut" id="Shortcut_gtm81"]
+events = [SubResource("InputEventKey_0rx5u")]
+
+[sub_resource type="Theme" id="Theme_qrcfa"]
+Button/styles/focus = SubResource("StyleBoxFlat_usjlg")
+
+[sub_resource type="InputEventKey" id="InputEventKey_b1p2g"]
+device = -1
+physical_keycode = 80
+unicode = 112
+
+[sub_resource type="Shortcut" id="Shortcut_vrjho"]
+events = [SubResource("InputEventKey_b1p2g")]
+
+[sub_resource type="Theme" id="Theme_llu4s"]
+Button/styles/focus = SubResource("StyleBoxFlat_usjlg")
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="bg" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_jl6ye")
+expand_mode = 3
+
+[node name="MasterAudio" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.003
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.2
+offset_top = 130.0
+offset_bottom = -139.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 3
+
+[node name="btnsVbox" type="VBoxContainer" parent="ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="map_based" type="HBoxContainer" parent="ScrollContainer/btnsVbox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+
+[node name="char_grid" type="GridContainer" parent="ScrollContainer/btnsVbox"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+columns = 3
+script = ExtResource("3_7s8gg")
+
+[node name="header_bg" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -248.0
+offset_top = -5.0
+offset_right = 247.0
+offset_bottom = 164.0
+grow_horizontal = 2
+size_flags_vertical = 6
+texture = ExtResource("1_hkxht")
+expand_mode = 1
+
+[node name="header" type="HBoxContainer" parent="header_bg"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.053
+anchor_top = 0.266
+anchor_right = 0.947
+anchor_bottom = 0.734
+offset_left = 28.765
+offset_top = 0.0460014
+offset_right = -28.765
+offset_bottom = -0.0460052
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+
+[node name="repeat_cont" type="HBoxContainer" parent="header_bg/header"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="RichTextLabel" type="RichTextLabel" parent="header_bg/header/repeat_cont"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+text = "Repeat"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false
+
+[node name="check_repeat" type="TextureButton" parent="header_bg/header/repeat_cont"]
+unique_name_in_owner = true
+layout_mode = 2
+texture_normal = ExtResource("4_ii4xe")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="header_bg/header"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+
+[node name="map_option" type="OptionButton" parent="header_bg/header/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 2
+focus_mode = 0
+theme = SubResource("Theme_58ylk")
+flat = true
+alignment = 1
+clip_text = true
+script = ExtResource("2_iwrv4")
+
+[node name="section_option" type="OptionButton" parent="header_bg/header/VBoxContainer"]
+unique_name_in_owner = true
+z_as_relative = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 10
+theme = SubResource("Theme_30bft")
+theme_override_constants/outline_size = 2
+flat = true
+alignment = 1
+item_count = 3
+selected = 0
+popup/item_0/text = "Round 1"
+popup/item_0/id = 0
+popup/item_1/text = "Round 2"
+popup/item_1/id = 1
+popup/item_2/text = "Final round"
+popup/item_2/id = 2
+
+[node name="solo_cont" type="HBoxContainer" parent="header_bg/header"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="check_solo" type="CheckBox" parent="header_bg/header/solo_cont"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme = SubResource("Theme_c3nfq")
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="header_bg/header/solo_cont"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+text = "Solo"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false
+
+[node name="timeNow" type="Label" parent="header_bg"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 15.0
+offset_right = 20.0
+offset_bottom = 38.0
+grow_horizontal = 2
+text = "0:12"
+label_settings = SubResource("LabelSettings_3ybju")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="footer_bg" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -202.0
+offset_top = -149.0
+offset_right = 202.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("4_t0102")
+
+[node name="slider_timeline" type="HSlider" parent="footer_bg"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -173.0
+offset_top = 5.5
+offset_right = 173.0
+offset_bottom = 29.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 2
+max_value = 120.0
+step = 0.1
+
+[node name="muteBtn" type="TextureButton" parent="footer_bg" node_paths=PackedStringArray("shortcut_context")]
+z_as_relative = false
+layout_mode = 1
+offset_left = 67.0
+offset_top = 28.0
+offset_right = 121.0
+offset_bottom = 73.0
+size_flags_horizontal = 10
+size_flags_vertical = 8
+shortcut_context = NodePath("")
+theme = SubResource("Theme_xxvtp")
+toggle_mode = true
+shortcut = SubResource("Shortcut_gtm81")
+texture_normal = ExtResource("10_28h1o")
+texture_pressed = ExtResource("10_28h1o")
+
+[node name="playBtn" type="TextureButton" parent="footer_bg"]
+unique_name_in_owner = true
+z_as_relative = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -26.0
+offset_top = 20.0
+offset_right = 26.0
+offset_bottom = 72.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme = SubResource("Theme_qrcfa")
+toggle_mode = true
+shortcut = SubResource("Shortcut_vrjho")
+texture_normal = ExtResource("4_62kyf")
+texture_pressed = ExtResource("4_yxqtb")
+
+[node name="footer" type="HBoxContainer" parent="footer_bg"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 37.0
+offset_top = -43.0
+offset_right = -37.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 6
+alignment = 1
+
+[node name="back_btn" type="Button" parent="footer_bg/footer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme = SubResource("Theme_llu4s")
+icon = ExtResource("6_od1gn")
+
+[node name="slow_btn" type="Button" parent="footer_bg/footer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme = SubResource("Theme_llu4s")
+icon = ExtResource("7_syt74")
+
+[node name="stop_btn" type="Button" parent="footer_bg/footer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme = SubResource("Theme_llu4s")
+icon = ExtResource("8_pppan")
+
+[node name="fast_btn" type="Button" parent="footer_bg/footer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme = SubResource("Theme_llu4s")
+icon = ExtResource("9_mcv0w")
+
+[node name="forward_btn" type="Button" parent="footer_bg/footer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme = SubResource("Theme_llu4s")
+icon = ExtResource("10_piqh3")
+
+[node name="AcceptDialog" type="AcceptDialog" parent="."]
+unique_name_in_owner = true
+initial_position = 2
+mode = 3
+content_scale_mode = 2
+
+[node name="backBtn" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 64.0
+offset_bottom = 55.0
+texture_normal = ExtResource("18_18na3")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="volumeMixContainer" type="TextureRect" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_top = 184.0
+offset_right = 304.0
+offset_bottom = -184.0
+grow_vertical = 2
+texture = ExtResource("19_d38sv")
+expand_mode = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="volumeMixContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 3
+
+[node name="VolumeMixer" type="VBoxContainer" parent="volumeMixContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+alignment = 1
+
+[connection signal="pressed" from="header_bg/header/repeat_cont/check_repeat" to="ScrollContainer/btnsVbox/char_grid" method="_on_check_repeat_toggled"]
+[connection signal="item_selected" from="header_bg/header/VBoxContainer/map_option" to="ScrollContainer/btnsVbox/char_grid" method="_on_map_option_item_selected"]
+[connection signal="item_selected" from="header_bg/header/VBoxContainer/section_option" to="ScrollContainer/btnsVbox/char_grid" method="_on_sect_change"]
+[connection signal="toggled" from="header_bg/header/solo_cont/check_solo" to="ScrollContainer/btnsVbox/char_grid" method="_on_check_solo_toggled"]
+[connection signal="drag_ended" from="footer_bg/slider_timeline" to="ScrollContainer/btnsVbox/char_grid" method="_on_slider_timeline_value_changed"]
+[connection signal="drag_started" from="footer_bg/slider_timeline" to="ScrollContainer/btnsVbox/char_grid" method="_on_slider_timeline_drag_started"]
+[connection signal="toggled" from="footer_bg/muteBtn" to="ScrollContainer/btnsVbox/char_grid" method="_on_mute_btn_toggled"]
+[connection signal="toggled" from="footer_bg/playBtn" to="ScrollContainer/btnsVbox/char_grid" method="_on_play_btn_toggled"]
+[connection signal="pressed" from="footer_bg/footer/back_btn" to="ScrollContainer/btnsVbox/char_grid" method="_on_back_btn_pressed"]
+[connection signal="pressed" from="footer_bg/footer/slow_btn" to="ScrollContainer/btnsVbox/char_grid" method="_on_slow_btn_pressed"]
+[connection signal="pressed" from="footer_bg/footer/stop_btn" to="ScrollContainer/btnsVbox/char_grid" method="_on_stop_btn_pressed"]
+[connection signal="pressed" from="footer_bg/footer/fast_btn" to="ScrollContainer/btnsVbox/char_grid" method="_on_fast_btn_pressed"]
+[connection signal="pressed" from="footer_bg/footer/forward_btn" to="ScrollContainer/btnsVbox/char_grid" method="_on_forward_btn_pressed"]
+[connection signal="pressed" from="backBtn" to="ScrollContainer/btnsVbox/char_grid" method="_on_quit_btn_pressed"]
