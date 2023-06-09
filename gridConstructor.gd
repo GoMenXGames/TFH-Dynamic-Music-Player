@@ -20,8 +20,10 @@ var time = 0
 var isPlaying = false
 var repeat = 0
 var playTime = 160.0
-var solo = false
+var solo = 0
 var minVol = -50
+var speed = 1
+var debuffVol = 0
 
 var sliderIsDrag = false
 
@@ -142,7 +144,7 @@ func _process(delta):
 			else:
 				%playBtn.button_pressed = false
 				
-		time = time + delta
+		time = time + (delta * speed)
 	
 	pass
 
@@ -215,25 +217,59 @@ func btn_pressed (name): #При нажатии кнопки персонажа
 	var state = getBtn(name)
 	print(state.button_pressed)
 	if state.button_pressed:
-		if solo:
+		if solo == 1:
+			print("soloMix")
+			%playBtn.button_pressed = true
+			resetBtns("none")
+			clearAudio()
+			print (soloPlaylist, " + ", name)
+			var _playlist = []
+			print (soloPlaylist, " + ", name)
+			for song in soloPlaylist:
+				_playlist.append(song)
+			print (soloPlaylist, " + ", name)
+			_playlist.append(name)
+			print (soloPlaylist, " + ", name)
+			loadPlaylist(_playlist)
+		elif solo == 2:
+			print("solo")
 			%playBtn.button_pressed = true
 			resetBtns(name)
 			clearAudio()
-		print("create")
-		createAudio(name)
+			createAudio(name)
+		else:
+			print("create")
+			createAudio(name)
 	else:
+		if solo == 1:
+			var newSoloPlaylist = []
+			for song in soloPlaylist:
+				if song != name:
+					newSoloPlaylist.append(song)
+			soloPlaylist = newSoloPlaylist
+				
 		print("destroy")
 		last_btn = "none"
 		removeAudio(name)
+	volumeChanged(getCharVol("all").value, "all")
 
 ### Sound func's
+
+func loadPlaylist(playlist):
+	print_debug(playlist)
+	for song in playlist:
+		var btns = get_tree().get_nodes_in_group("g_music_btn")
+		for btn in btns:
+			if btn.name.split("_")[1] == song:
+				btn.button_pressed = true
+		createAudio(song)
 
 func restart():
 	play()
 
 func play():
 	var playlist = getPlaylist()
-	print_debug(playlist)
+#	print_debug(playlist)
 	for song in playlist:
 		print(song.name, " | ", time)
 		song.play(time)
@@ -270,6 +306,7 @@ func createAudio(char): # [v] Создать звуковой файл
 		playTime = newAudio.stream.get_length() #Получить время трека
 		var volume = getCharVol(char).value
 		newAudio.volume_db = volume
+		newAudio.pitch_scale = speed
 		
 		%slider_timeline.max_value = playTime
 		%MasterAudio.add_child(newAudio) #Создать
@@ -304,12 +341,17 @@ func clearAudio():
 		song.free()
 		
 
+func changePlaySpeed():
+	var playlist = getPlaylist()
+	for song in playlist:
+		song.pitch_scale = speed 
+
 func changeVolume(db):
 	var playlist = getPlaylist()
 	print_debug(playlist)
 	for song in playlist:
 		print(song.name, " | ", time)
-		song.volume_db = db
+		song.volume_db = db 
 
 func setTime(value):
 	time = value
@@ -330,8 +372,8 @@ func switchAudio():
 func getCharVol(char):
 	var vol_sliders = get_tree().get_nodes_in_group("volumeSliders")
 	for slider in vol_sliders:
-		print(slider.name)
 		if slider.name.split("_")[1] == char:
+			print(slider.name)
 			return slider
 
 func volumeChanged(dbValue, char):
@@ -339,7 +381,11 @@ func volumeChanged(dbValue, char):
 		dbValue = -99999
 	print("change vol:" + char)
 	if char == "all":
-		AudioServer.set_bus_volume_db(0,dbValue)
+		var countChars = %MasterAudio.get_child_count()
+		print (dbValue, " ", debuffVol, " ", countChars)
+		var db = dbValue - (debuffVol * countChars)
+		print(dbValue - (debuffVol * countChars))
+		AudioServer.set_bus_volume_db(0,db)
 		print(dbValue)
 	else:
 		var db = dbValue
@@ -352,6 +398,14 @@ func changeCharVol(char,db):
 		if (song.name.split("_")[2]) == char:
 			print(db)
 			song.volume_db = db
+
+var soloPlaylist = []
+func createPlaylist():
+	var playlist = getPlaylist()
+	soloPlaylist = []
+	for song in playlist:
+		soloPlaylist.append(song.name.split("_")[2])
+	print(soloPlaylist)
 
 ### clickble
 
@@ -382,11 +436,23 @@ func _on_check_repeat_toggled():
 	%check_repeat.texture_normal = load("res://src/img/ui/icons/"+repeatArr[repeat]+".png")
 	pass # Replace with function body.
 
+var soloArr = ["lock_white", "lock_green", "lock_red"]
 
-func _on_check_solo_toggled(button_pressed):
-	solo = button_pressed
-	resetBtns(last_btn)
-	restartSolo(last_btn)
+func _on_check_solo_pressed():
+	if soloArr.size() > solo+1:
+#		print("+1")
+		solo = solo + 1
+	else:
+#		print("=0")
+		solo = 0
+	print(soloArr[solo])
+	%check_solo.texture_normal = load("res://src/img/ui/icons/"+soloArr[solo]+".png")
+	if solo == 1:
+		print("btn_solo")
+		createPlaylist()
+	if solo == 2:
+		resetBtns(last_btn)
+		restartSolo(last_btn)
 	pass # Replace with function body.
 
 
@@ -465,4 +531,30 @@ func _on_stop_btn_pressed():
 
 func _on_quit_btn_pressed():
 	get_tree().change_scene_to_file("res://mainmenu.tscn")
+	pass # Replace with function body.
+
+
+func _on_option_btn_toggled(button_pressed):
+	if button_pressed:
+		%additionConfigContainer.show()
+	else:
+		%additionConfigContainer.hide()
+	
+	pass # Replace with function body.
+
+
+func _on_volume_fix_toggled(button_pressed):
+	if button_pressed:
+		debuffVol = 1
+	else:
+		debuffVol = 0
+	volumeChanged(getCharVol("all").value, "all")
+	pass # Replace with function body.
+
+
+func _on_speed_slider_value_changed(value):
+	speed = value/100
+	%speedLabel.text = "Speed (x"+str(speed)+")"
+	%MasterAudio.pitch_scale = speed
+	changePlaySpeed()
 	pass # Replace with function body.

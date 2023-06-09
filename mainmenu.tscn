@@ -123,7 +123,7 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "GitHub"
 underline = 1
-uri = "https://GitHub.com/gomexngames"
+uri = "https://github.com/GoMenXGames/TFH-Dynamic-Music-Player"
 structured_text_bidi_override = 1
 
 [connection signal="pressed" from="StartBtn" to="." method="_on_texture_button_pressed"]

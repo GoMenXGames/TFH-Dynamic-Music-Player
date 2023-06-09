@@ -1,23 +1,27 @@
-[gd_scene load_steps=31 format=3 uid="uid://riq4laevjead"]
+[gd_scene load_steps=36 format=3 uid="uid://riq4laevjead"]
 
 [ext_resource type="Texture2D" uid="uid://ba2nbhxhnwyq1" path="res://src/img/ui/hud_red.png" id="1_hkxht"]
 [ext_resource type="Texture2D" uid="uid://bijpx3gkq538q" path="res://src/img/maps/other/training.png" id="1_jl6ye"]
 [ext_resource type="Script" path="res://option_state.gd" id="2_iwrv4"]
 [ext_resource type="Script" path="res://gridConstructor.gd" id="3_7s8gg"]
-[ext_resource type="Texture2D" uid="uid://drmmg1lii13pt" path="res://src/img/ui/icons/approved.png" id="3_xsa4e"]
 [ext_resource type="Texture2D" uid="uid://cxecupc30mgwe" path="res://src/img/ui/media/play.png" id="4_62kyf"]
 [ext_resource type="Texture2D" uid="uid://betinmmbh5fvx" path="res://src/img/ui/icons/deny.png" id="4_ii4xe"]
 [ext_resource type="Texture2D" uid="uid://bh6a8eiafhe7f" path="res://src/img/ui/hud_playback.png" id="4_t0102"]
 [ext_resource type="Texture2D" uid="uid://bvqqpndv4h0ww" path="res://src/img/ui/media/pause.png" id="4_yxqtb"]
 [ext_resource type="Texture2D" uid="uid://cymsgc0ly1hyh" path="res://empty.png" id="5_ar5f4"]
 [ext_resource type="Texture2D" uid="uid://dpaxsbttvcij5" path="res://src/img/ui/media/backward.png" id="6_od1gn"]
+[ext_resource type="Texture2D" uid="uid://ck1kgdhreitbf" path="res://src/img/ui/icons/lock_green.png" id="7_1ived"]
 [ext_resource type="Texture2D" uid="uid://b6p5f02xqbc7g" path="res://src/img/ui/media/speedDown.png" id="7_syt74"]
+[ext_resource type="Texture2D" uid="uid://bwq1gks4q5mub" path="res://src/img/ui/icons/lock_white.png" id="8_0rhq1"]
 [ext_resource type="Texture2D" uid="uid://c3kx46si0ib56" path="res://src/img/ui/media/stop.png" id="8_pppan"]
 [ext_resource type="Texture2D" uid="uid://ck5upol1f0uly" path="res://src/img/ui/media/speedUp.png" id="9_mcv0w"]
 [ext_resource type="Texture2D" uid="uid://c24txe51g7ftf" path="res://src/img/ui/icons/volume.png" id="10_28h1o"]
 [ext_resource type="Texture2D" uid="uid://eq43idq470w6" path="res://src/img/ui/media/forward.png" id="10_piqh3"]
+[ext_resource type="Texture2D" uid="uid://jpggm4kpo4kf" path="res://src/img/ui/icons/options.png" id="13_k4clw"]
 [ext_resource type="Texture2D" uid="uid://o40ykr6wwuog" path="res://src/img/ui/icons/arrowBack.png" id="18_18na3"]
 [ext_resource type="Texture2D" uid="uid://dhbkdfrhxn2ne" path="res://src/img/ui/icons/Overlay.png" id="19_d38sv"]
+[ext_resource type="Texture2D" uid="uid://b780uxf56mfn" path="res://src/img/ui/icons/check_on.png" id="20_kmjww"]
+[ext_resource type="Texture2D" uid="uid://df64g661742rb" path="res://src/img/ui/icons/check_off.png" id="21_n41we"]
 
 [sub_resource type="Theme" id="Theme_58ylk"]
 OptionButton/constants/h_separation = 0
@@ -44,8 +48,8 @@ PopupMenu/icons/radio_unchecked = null
 PopupMenu/icons/radio_unchecked_disabled = null
 
 [sub_resource type="Theme" id="Theme_c3nfq"]
-CheckBox/icons/checked = ExtResource("3_xsa4e")
-CheckBox/icons/unchecked = ExtResource("4_ii4xe")
+CheckBox/icons/checked = ExtResource("7_1ived")
+CheckBox/icons/unchecked = ExtResource("7_1ived")
 CheckBox/styles/focus = SubResource("StyleBoxFlat_usjlg")
 
 [sub_resource type="LabelSettings" id="LabelSettings_3ybju"]
@@ -75,6 +79,10 @@ events = [SubResource("InputEventKey_b1p2g")]
 
 [sub_resource type="Theme" id="Theme_llu4s"]
 Button/styles/focus = SubResource("StyleBoxFlat_usjlg")
+
+[sub_resource type="Theme" id="Theme_0gv0a"]
+CheckBox/icons/checked = ExtResource("20_kmjww")
+CheckBox/icons/unchecked = ExtResource("21_n41we")
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -147,6 +155,25 @@ size_flags_vertical = 6
 texture = ExtResource("1_hkxht")
 expand_mode = 1
 
+[node name="repeat_cont" type="HBoxContainer" parent="header_bg"]
+visible = false
+layout_mode = 2
+offset_left = 215.0
+offset_top = 84.0
+offset_right = 215.0
+offset_bottom = 84.0
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="solo_cont" type="HBoxContainer" parent="header_bg"]
+visible = false
+layout_mode = 2
+offset_left = 412.0
+offset_top = 45.0
+offset_right = 412.0
+offset_bottom = 124.0
+size_flags_horizontal = 8
+
 [node name="header" type="HBoxContainer" parent="header_bg"]
 layout_mode = 1
 anchors_preset = -1
@@ -162,13 +189,19 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 
-[node name="repeat_cont" type="HBoxContainer" parent="header_bg/header"]
+[node name="check_repeat" type="TextureButton" parent="header_bg/header"]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 6
 size_flags_vertical = 4
+texture_normal = ExtResource("4_ii4xe")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="header_bg/header/repeat_cont"]
+[node name="RichTextLabel" type="RichTextLabel" parent="header_bg/header/check_repeat"]
 layout_mode = 2
+offset_left = -59.0
+offset_top = 1.0
+offset_right = -4.0
+offset_bottom = 24.0
 size_flags_horizontal = 3
 size_flags_vertical = 4
 text = "Repeat"
@@ -176,11 +209,6 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 0
 shortcut_keys_enabled = false
-
-[node name="check_repeat" type="TextureButton" parent="header_bg/header/repeat_cont"]
-unique_name_in_owner = true
-layout_mode = 2
-texture_normal = ExtResource("4_ii4xe")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="header_bg/header"]
 layout_mode = 2
@@ -204,7 +232,7 @@ unique_name_in_owner = true
 z_as_relative = false
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 10
+size_flags_vertical = 6
 theme = SubResource("Theme_30bft")
 theme_override_constants/outline_size = 2
 flat = true
@@ -218,17 +246,24 @@ popup/item_1/id = 1
 popup/item_2/text = "Final round"
 popup/item_2/id = 2
 
-[node name="solo_cont" type="HBoxContainer" parent="header_bg/header"]
-layout_mode = 2
-size_flags_horizontal = 8
-
-[node name="check_solo" type="CheckBox" parent="header_bg/header/solo_cont"]
+[node name="check_solo" type="TextureButton" parent="header_bg/header"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
+size_flags_vertical = 4
 theme = SubResource("Theme_c3nfq")
+texture_normal = ExtResource("8_0rhq1")
 
-[node name="RichTextLabel2" type="RichTextLabel" parent="header_bg/header/solo_cont"]
-layout_mode = 2
+[node name="RichTextLabel2" type="RichTextLabel" parent="header_bg/header/check_solo"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 17.0
+offset_top = -11.5
+offset_right = 50.0
+offset_bottom = 11.5
+grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 text = "Solo"
@@ -322,6 +357,20 @@ toggle_mode = true
 shortcut = SubResource("Shortcut_vrjho")
 texture_normal = ExtResource("4_62kyf")
 texture_pressed = ExtResource("4_yxqtb")
+
+[node name="optionBtn" type="Button" parent="footer_bg"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -137.0
+offset_top = 23.0
+offset_right = -31.0
+offset_bottom = 75.0
+grow_horizontal = 0
+toggle_mode = true
+icon = ExtResource("13_k4clw")
+flat = true
 
 [node name="footer" type="HBoxContainer" parent="footer_bg"]
 layout_mode = 1
@@ -424,17 +473,80 @@ size_flags_horizontal = 6
 size_flags_vertical = 6
 alignment = 1
 
-[connection signal="pressed" from="header_bg/header/repeat_cont/check_repeat" to="ScrollContainer/btnsVbox/char_grid" method="_on_check_repeat_toggled"]
+[node name="additionConfigContainer" type="TextureRect" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -215.0
+offset_top = 359.0
+offset_bottom = -359.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("19_d38sv")
+expand_mode = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="additionConfigContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 11.0
+offset_top = 8.0
+offset_right = -10.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 3
+
+[node name="elements" type="VBoxContainer" parent="additionConfigContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="speedLabel" type="Label" parent="additionConfigContainer/ScrollContainer/elements"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "speed (x1.0)"
+
+[node name="speedSlider" type="HSlider" parent="additionConfigContainer/ScrollContainer/elements"]
+layout_mode = 2
+min_value = 50.0
+max_value = 200.0
+value = 100.0
+tick_count = 4
+ticks_on_borders = true
+
+[node name="volumeFix" type="CheckBox" parent="additionConfigContainer/ScrollContainer/elements"]
+layout_mode = 2
+tooltip_text = "If you select more
+than one icon, the
+sound will decrease
+with each additional
+icon selected."
+theme = SubResource("Theme_0gv0a")
+text = "Anti-deaf mode"
+
+[connection signal="pressed" from="header_bg/header/check_repeat" to="ScrollContainer/btnsVbox/char_grid" method="_on_check_repeat_toggled"]
 [connection signal="item_selected" from="header_bg/header/VBoxContainer/map_option" to="ScrollContainer/btnsVbox/char_grid" method="_on_map_option_item_selected"]
 [connection signal="item_selected" from="header_bg/header/VBoxContainer/section_option" to="ScrollContainer/btnsVbox/char_grid" method="_on_sect_change"]
-[connection signal="toggled" from="header_bg/header/solo_cont/check_solo" to="ScrollContainer/btnsVbox/char_grid" method="_on_check_solo_toggled"]
+[connection signal="pressed" from="header_bg/header/check_solo" to="ScrollContainer/btnsVbox/char_grid" method="_on_check_solo_pressed"]
 [connection signal="drag_ended" from="footer_bg/slider_timeline" to="ScrollContainer/btnsVbox/char_grid" method="_on_slider_timeline_value_changed"]
 [connection signal="drag_started" from="footer_bg/slider_timeline" to="ScrollContainer/btnsVbox/char_grid" method="_on_slider_timeline_drag_started"]
 [connection signal="toggled" from="footer_bg/muteBtn" to="ScrollContainer/btnsVbox/char_grid" method="_on_mute_btn_toggled"]
 [connection signal="toggled" from="footer_bg/playBtn" to="ScrollContainer/btnsVbox/char_grid" method="_on_play_btn_toggled"]
+[connection signal="toggled" from="footer_bg/optionBtn" to="ScrollContainer/btnsVbox/char_grid" method="_on_option_btn_toggled"]
 [connection signal="pressed" from="footer_bg/footer/back_btn" to="ScrollContainer/btnsVbox/char_grid" method="_on_back_btn_pressed"]
 [connection signal="pressed" from="footer_bg/footer/slow_btn" to="ScrollContainer/btnsVbox/char_grid" method="_on_slow_btn_pressed"]
 [connection signal="pressed" from="footer_bg/footer/stop_btn" to="ScrollContainer/btnsVbox/char_grid" method="_on_stop_btn_pressed"]
 [connection signal="pressed" from="footer_bg/footer/fast_btn" to="ScrollContainer/btnsVbox/char_grid" method="_on_fast_btn_pressed"]
 [connection signal="pressed" from="footer_bg/footer/forward_btn" to="ScrollContainer/btnsVbox/char_grid" method="_on_forward_btn_pressed"]
 [connection signal="pressed" from="backBtn" to="ScrollContainer/btnsVbox/char_grid" method="_on_quit_btn_pressed"]
+[connection signal="value_changed" from="additionConfigContainer/ScrollContainer/elements/speedSlider" to="ScrollContainer/btnsVbox/char_grid" method="_on_speed_slider_value_changed"]
+[connection signal="toggled" from="additionConfigContainer/ScrollContainer/elements/volumeFix" to="ScrollContainer/btnsVbox/char_grid" method="_on_volume_fix_toggled"]
