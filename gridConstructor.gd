@@ -41,6 +41,7 @@ func genMapBasedBtn():
 		#Визуал
 		newBtn.texture_pressed = load("res://src/img/icons/"+btn+".png");
 		newBtn.texture_normal = load("res://src/img/icons/"+btn+"_gray.png");
+		
 		newBtn.texture_disabled = load("res://src/img/icons/"+btn+"_lock.png");
 		newBtn.add_to_group("g_music_btn")
 		%map_based.add_child(newBtn)
@@ -84,7 +85,7 @@ func genCharMixer():
 		newSlider.scrollable = false
 		#Volume
 		newSlider.min_value = minVol
-		newSlider.max_value = 0
+		newSlider.max_value = 10
 		newSlider.step = 0.01
 		
 		newSlider.value = 0
@@ -194,7 +195,6 @@ func resetBtns(name):
 	var btns = get_tree().get_nodes_in_group("g_music_btn")
 	for btn in btns:
 		var btnName = btn.name.split("_")[1]
-		var path = "res://src/music/"+map+"/"+section+"/"+map+"_"+btnName+"_"+section+".wav.import"
 		if  not btn.name.split("_")[1] == name:
 			btn.button_pressed = false 
 
@@ -206,6 +206,15 @@ func checkBtns():
 		var btnName = btn.name.split("_")[1]
 		var path = "res://src/music/"+map+"/"+section+"/"+map+"_"+btnName+"_"+section+".wav.import"
 		if FileAccess.file_exists(path):
+			btn.texture_pressed = load("res://src/img/icons/"+btnName+".png");
+			btn.texture_normal = load("res://src/img/icons/"+btnName+"_gray.png");
+			btn.disabled = false
+			continue
+		else:
+			path = "res://src/music/"+map+"/"+section+"/"+map+"_"+btnName+"_"+section+"_ig"+".wav.import"
+		if FileAccess.file_exists(path):
+			btn.texture_pressed = load("res://src/img/icons/"+btnName+"_bronze.png");
+			btn.texture_normal = load("res://src/img/icons/"+btnName+"_bronze_gray.png");
 			btn.disabled = false
 		else: 
 			btn.disabled = true
@@ -287,13 +296,20 @@ func restartSolo(name):
 		
 	if last_btn != "none":
 		createAudio(name)
-	play()
+	if isPlaying:
+		play()
 	
 
 func createAudio(char): # [v] Создать звуковой файл 
 	var newAudio = AudioStreamPlayer.new()
-	newAudio.name = "audioPlayer_" + map + "_" + char + "_" + section
-	var path = "res://src/music/"+map+"/"+section+"/"+map+"_"+char+"_"+section+".wav"
+	var isBronze = getBtn(char).texture_pressed.resource_path.contains("_bronze")
+	var addBronze = ""
+	if isBronze:
+		addBronze = "_ig"
+	else:
+		addBronze = ""
+	newAudio.name = "audioPlayer_" + map + "_" + char + "_" + section + addBronze
+	var path = "res://src/music/"+map+"/"+section+"/"+map+"_"+char+"_"+section+addBronze+".wav"
 	newAudio.stream = load(path)
 	#print_debug(newAudio.stream)
 	if !newAudio.stream: #Проверка на существование файла
@@ -318,7 +334,13 @@ func createAudio(char): # [v] Создать звуковой файл
 	pass
 
 func removeAudio(name): #Удалить файл
-	var elem = %MasterAudio.get_node("audioPlayer_" + map + "_" + name + "_" + section)
+	var isBronze = getBtn(name).texture_pressed.resource_path.contains("_bronze")
+	var addBronze = ""
+	if isBronze:
+		addBronze = "_ig"
+	else:
+		addBronze = ""
+	var elem = %MasterAudio.get_node("audioPlayer_" + map + "_" + name + "_" + section + addBronze)
 	print_debug(elem," = ",typeof(elem))
 	if typeof(elem) != 24:
 		print("fuck")
