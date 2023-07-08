@@ -16,6 +16,10 @@ var last_btn = "none"
 var map = "none"
 var section = "none"
 
+var username = OS.get_environment("USERNAME")
+var path_presetsFiles = "C:\\Users\\"+username+"\\Documents\\TFH Dynamic Music Player"
+var presets = []
+
 var time = 0
 var isPlaying = false
 var repeat = 0
@@ -27,7 +31,8 @@ var debuffVol = 0
 
 var sliderIsDrag = false
 
-### Генерация
+
+###Генерация
 #Static & Idle buttons
 func genMapBasedBtn():
 	var btns = mapBased
@@ -107,6 +112,22 @@ func _ready():
 	loadMaps() #bg change
 	getNameSect(%section_option.selected)
 	checkBtns()
+	if DirAccess.dir_exists_absolute(path_presetsFiles+"/presets/"):
+		print("folder exits")
+#		presets = load_presets()
+	else:
+		print("Create folder")
+		DirAccess.make_dir_recursive_absolute(path_presetsFiles+"/presets/")
+	reloadPresetList() #old
+	%LinkFolderPresets.uri = path_presetsFiles+"/presets/"
+	print_debug(getListFilePresets())
+	
+	
+func _notification(what):
+	match what:
+		NOTIFICATION_APPLICATION_FOCUS_IN:
+			reloadPresetList()
+			pass
 
 func loadMaps(): # BG change 
 	var maps = arrMaps.split(" ")
@@ -120,12 +141,12 @@ func loadMaps(): # BG change
 	var size = iconPath.size()
 	var iconName = iconPath[size-1].split(".")[0]
 	
-	print(DirAccess.get_files_at("res://src/img/maps/" + iconName))
+#	#print(DirAccess.get_files_at("res://src/img/maps/" + iconName))
 	var allowedMaps = DirAccess.get_files_at("res://src/img/maps/" + iconName)
 #	var rngName = ".import"
 ##	while rngName.contains("import"):
 	var rngName = allowedMaps[randi_range(0,allowedMaps.size()-1)]
-	print(rngName)
+#	#print(rngName)
 	%bg.texture = load("res://src/img/maps/"+ iconName + "/"+ rngName.split(".import")[0])
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -156,14 +177,14 @@ func changeLevel(id):
 	var iconPath = mapIcon.resource_path.split("/")
 	var size = iconPath.size()
 	var iconName = iconPath[size-1].split(".")[0]
-	print_debug(iconName)
+	#print_debug(iconName)
 	
-	print(DirAccess.get_files_at("res://src/img/maps/" + iconName))
+	#print(DirAccess.get_files_at("res://src/img/maps/" + iconName))
 	var allowedMaps = DirAccess.get_files_at("res://src/img/maps/" + iconName)
 	var rngName = ".import"
 #	while rngName.contains("import"):
 	rngName = allowedMaps[randi_range(0,allowedMaps.size()-1)]
-	print(rngName)
+	#print(rngName)
 	%bg.texture = load("res://src/img/maps/"+ iconName + "/"+ rngName.split(".import")[0])
 	
 
@@ -222,32 +243,32 @@ func checkBtns():
 func btn_pressed (name): #При нажатии кнопки персонажа
 	map = getMapName()
 	section = getNameSect(%section_option.selected)
-	print(map, " ", name, " ", section)
+	#print(map, " ", name, " ", section)
 	var state = getBtn(name)
-	print(state.button_pressed)
+	#print(state.button_pressed)
 	if state.button_pressed:
 		if solo == 1:
-			print("soloMix")
-			%playBtn.button_pressed = true
+			#print("soloMix")
+#			%playBtn.button_pressed = true
 			resetBtns("none")
 			clearAudio()
-			print (soloPlaylist, " + ", name)
+			#print (soloPlaylist, " + ", name)
 			var _playlist = []
-			print (soloPlaylist, " + ", name)
+			#print (soloPlaylist, " + ", name)
 			for song in soloPlaylist:
 				_playlist.append(song)
-			print (soloPlaylist, " + ", name)
+			#print (soloPlaylist, " + ", name)
 			_playlist.append(name)
-			print (soloPlaylist, " + ", name)
+			#print (soloPlaylist, " + ", name)
 			loadPlaylist(_playlist)
 		elif solo == 2:
-			print("solo")
-			%playBtn.button_pressed = true
+			#print("solo")
+#			%playBtn.button_pressed = true
 			resetBtns(name)
 			clearAudio()
 			createAudio(name)
 		else:
-			print("create")
+			#print("create")
 			createAudio(name)
 	else:
 		if solo == 1:
@@ -257,7 +278,7 @@ func btn_pressed (name): #При нажатии кнопки персонажа
 					newSoloPlaylist.append(song)
 			soloPlaylist = newSoloPlaylist
 				
-		print("destroy")
+		#print("destroy")
 		last_btn = "none"
 		removeAudio(name)
 	volumeChanged(getCharVol("all").value, "all")
@@ -265,7 +286,7 @@ func btn_pressed (name): #При нажатии кнопки персонажа
 ### Sound func's
 
 func loadPlaylist(playlist):
-	print_debug(playlist)
+	#print_debug(playlist)
 	for song in playlist:
 		var btns = get_tree().get_nodes_in_group("g_music_btn")
 		for btn in btns:
@@ -278,9 +299,9 @@ func restart():
 
 func play():
 	var playlist = getPlaylist()
-#	print_debug(playlist)
+#	#print_debug(playlist)
 	for song in playlist:
-		print(song.name, " | ", time)
+		#print(song.name, " | ", time)
 		song.play(time)
 	
 func pause():
@@ -290,7 +311,7 @@ func pause():
 
 func restartSolo(name):
 	var playlist = getPlaylist()
-	print_debug(playlist)
+	#print_debug(playlist)
 	for song in playlist:
 		song.free()
 		
@@ -311,7 +332,7 @@ func createAudio(char): # [v] Создать звуковой файл
 	newAudio.name = "audioPlayer_" + map + "_" + char + "_" + section + addBronze
 	var path = "res://src/music/"+map+"/"+section+"/"+map+"_"+char+"_"+section+addBronze+".wav"
 	newAudio.stream = load(path)
-	#print_debug(newAudio.stream)
+	##print_debug(newAudio.stream)
 	if !newAudio.stream: #Проверка на существование файла
 		var dialog = %AcceptDialog
 		dialog.dialog_text = path + " \n Is not exist!"
@@ -341,7 +362,7 @@ func removeAudio(name): #Удалить файл
 	else:
 		addBronze = ""
 	var elem = %MasterAudio.get_node("audioPlayer_" + map + "_" + name + "_" + section + addBronze)
-	print_debug(elem," = ",typeof(elem))
+	#print_debug(elem," = ",typeof(elem))
 	if typeof(elem) != 24:
 		print("fuck")
 	else:
@@ -370,9 +391,9 @@ func changePlaySpeed():
 
 func changeVolume(db):
 	var playlist = getPlaylist()
-	print_debug(playlist)
+	#print_debug(playlist)
 	for song in playlist:
-		print(song.name, " | ", time)
+		#print(song.name, " | ", time)
 		song.volume_db = db 
 
 func setTime(value):
@@ -385,7 +406,7 @@ func switchAudio():
 	var newPlaylist = []
 	for song in playlist:
 		newPlaylist.append(song.name.split("_")[2])
-	print(newPlaylist)
+	#print(newPlaylist)
 	clearAudio()
 	for song in newPlaylist:
 		createAudio(song)
@@ -395,20 +416,20 @@ func getCharVol(char):
 	var vol_sliders = get_tree().get_nodes_in_group("volumeSliders")
 	for slider in vol_sliders:
 		if slider.name.split("_")[1] == char:
-			print(slider.name)
+			#print(slider.name)
 			return slider
 
 func volumeChanged(dbValue, char):
 	if (dbValue < -49):
 		dbValue = -99999
-	print("change vol:" + char)
+	#print("change vol:" + char)
 	if char == "all":
 		var countChars = %MasterAudio.get_child_count()
-		print (dbValue, " ", debuffVol, " ", countChars)
+		#print (dbValue, " ", debuffVol, " ", countChars)
 		var db = dbValue - (debuffVol * countChars)
-		print(dbValue - (debuffVol * countChars))
+		#print(dbValue - (debuffVol * countChars))
 		AudioServer.set_bus_volume_db(0,db)
-		print(dbValue)
+		#print(dbValue)
 	else:
 		var db = dbValue
 		changeCharVol(char,db)
@@ -418,7 +439,7 @@ func changeCharVol(char,db):
 	var audio
 	for song in playlist:
 		if (song.name.split("_")[2]) == char:
-			print(db)
+			#print(db)
 			song.volume_db = db
 
 var soloPlaylist = []
@@ -427,7 +448,7 @@ func createPlaylist():
 	soloPlaylist = []
 	for song in playlist:
 		soloPlaylist.append(song.name.split("_")[2])
-	print(soloPlaylist)
+	#print(soloPlaylist)
 
 ### clickble
 
@@ -447,14 +468,14 @@ func _on_play_btn_toggled(button_pressed):
 
 
 func _on_check_repeat_toggled():
-#	print(repeatArr.size(), ", ", repeat)
+#	#print(repeatArr.size(), ", ", repeat)
 	if repeatArr.size() > repeat+1:
-#		print("+1")
+#		#print("+1")
 		repeat = repeat + 1
 	else:
-#		print("=0")
+#		#print("=0")
 		repeat = 0
-	print(repeatArr[repeat])
+	#print(repeatArr[repeat])
 	%check_repeat.texture_normal = load("res://src/img/ui/icons/"+repeatArr[repeat]+".png")
 	pass # Replace with function body.
 
@@ -462,15 +483,15 @@ var soloArr = ["lock_white", "lock_green", "lock_red"]
 
 func _on_check_solo_pressed():
 	if soloArr.size() > solo+1:
-#		print("+1")
+#		#print("+1")
 		solo = solo + 1
 	else:
-#		print("=0")
+#		#print("=0")
 		solo = 0
-	print(soloArr[solo])
+	#print(soloArr[solo])
 	%check_solo.texture_normal = load("res://src/img/ui/icons/"+soloArr[solo]+".png")
 	if solo == 1:
-		print("btn_solo")
+		#print("btn_solo")
 		createPlaylist()
 	if solo == 2:
 		resetBtns(last_btn)
@@ -506,7 +527,7 @@ func _on_sect_change(index):
 #	%playBtn.button_pressed = false
 
 func _on_forward_btn_pressed():
-	print(%map_option.item_count, ": ", %map_option.selected)
+	#print(%map_option.item_count, ": ", %map_option.selected)
 	if %map_option.item_count > %map_option.selected+1:
 		%map_option.select(%map_option.selected+1)
 	else:
@@ -515,7 +536,7 @@ func _on_forward_btn_pressed():
 	pass # Replace with function body.
 	
 func _on_fast_btn_pressed():
-	print(%section_option.item_count, ": ", %section_option.selected)
+	#print(%section_option.item_count, ": ", %section_option.selected)
 	if %section_option.item_count > %section_option.selected+1:
 		%section_option.select(%section_option.selected+1)
 	else:
@@ -524,7 +545,7 @@ func _on_fast_btn_pressed():
 	pass # Replace with function body.
 
 func _on_back_btn_pressed():
-	print(%map_option.item_count, ": ", %map_option.selected)
+	#print(%map_option.item_count, ": ", %map_option.selected)
 	if %map_option.selected > 0:
 		%map_option.select(%map_option.selected-1)
 	else:
@@ -533,7 +554,7 @@ func _on_back_btn_pressed():
 	pass # Replace with function body.
 	
 func _on_slow_btn_pressed():
-	print(%section_option.item_count, ": ", %section_option.selected)
+	#print(%section_option.item_count, ": ", %section_option.selected)
 	if %section_option.selected > 0:
 		%section_option.select(%section_option.selected-1)
 	else:
@@ -579,4 +600,287 @@ func _on_speed_slider_value_changed(value):
 	%speedLabel.text = "Speed (x"+str(speed)+")"
 	%MasterAudio.pitch_scale = speed
 	changePlaySpeed()
+	pass # Replace with function body.
+
+
+func _on_btn_add_preset_pressed():
+	var name = %edit_presetName.text
+	var alreadyHas = false
+	
+	if %switchFileFolder.button_pressed:
+		#Folder mode
+		if DirAccess.dir_exists_absolute(path_presetsFiles + %PresetsPath.text + name):
+			alreadyHas = true
+			
+		if alreadyHas:
+			%AcceptDialog.position = get_screen_position()
+			%AcceptDialog.dialog_text = "Folder with name \""+name+"\": already has!"
+			%AcceptDialog.visible = true
+		else:
+			addFolder(path_presetsFiles + %PresetsPath.text + name)
+			reloadPresetList()
+			%popup_addPreset.visible = false
+			%btn_listAddPreset.button_pressed = false
+	else: 
+		for preset in DirAccess.get_files_at(path_presetsFiles + %PresetsPath.text):
+			if preset == name+".tfhp":
+				alreadyHas = true
+		
+		if alreadyHas:
+			%AcceptDialog.position = get_screen_position()
+			%AcceptDialog.dialog_text = "Preset with name \""+name+"\": already has!"
+			%AcceptDialog.visible = true
+		else:
+			addPreset(name)
+			reloadPresetList()
+			%popup_addPreset.visible = false
+			%btn_listAddPreset.button_pressed = false
+	pass # Replace with function body.
+
+func addFolder(path):
+	DirAccess.make_dir_absolute(path)
+	
+func removeFolder(path):
+	print(path, " is removed!")
+	OS.move_to_trash(path)
+	reloadPresetList()
+
+func preRemoveFolder(path):
+	var countFiles = DirAccess.get_directories_at(path).size() + DirAccess.get_files_at(path).size()
+	if countFiles > 0:
+		var newWarnWindow = AcceptDialog.new()
+		newWarnWindow.dialog_text = "This folder contain files or folders (~"+str(countFiles)+"),\n you sure are yo delete this?"
+		newWarnWindow.ok_button_text = "Yes"
+		newWarnWindow.get_ok_button().pressed.connect(removeFolder.bind(path))
+		newWarnWindow.add_cancel_button("No")
+		newWarnWindow.show()
+		newWarnWindow.position = get_screen_position()
+		%popup_addPreset.add_child(newWarnWindow)
+	else: 
+		removeFolder(path)
+
+
+func addPreset(name):
+	var preset = {}
+	preset["name"] = name 
+	#Additional settings
+	preset["time"] = time 
+	preset["volume"] = getVolumeArr()
+	preset["speed"] = speed 
+	preset["repeat"] = repeat 
+	preset["solo"] = solo
+	preset["debuffVol"] = debuffVol 
+	#Music Layers
+	preset["map"] = map
+	preset["section"] = section
+	preset["btns"] = getBtns()
+	presets.append(preset)
+	saveFile(name, preset)
+	pass
+
+func getVolumeArr():
+	var volumes = {}
+	var container = %VolumeMixer.get_children(false)
+	var chars = ("all idle static "+arrChar).split(" ")
+	var index = 0
+	for char in chars:
+		var volMeter = container[index].get_child(1).value
+		print_debug(volMeter)
+		volumes[char] = volMeter
+		index+=1
+	return volumes
+
+func removePreset(name):
+	#print("try remove " + name)
+#	for id in range(presets.size()):
+#		if preset[id].name == name:
+#			#print("rem: ",id)
+#			presets.remove_at(id)
+#			reloadPresetList()
+#			return
+#	save(presets)
+	removeFile(path_presetsFiles+%PresetsPath.text + name + ".tfhp")
+	reloadPresetList()	
+
+func getBtns():
+	var pressedBtns = []
+	print(pressedBtns)
+	var btns = get_tree().get_nodes_in_group("g_music_btn")
+	for btn in btns:
+		if btn.button_pressed == true:
+			pressedBtns.append(btn.name.split("_")[1])
+	return pressedBtns
+
+func selectPreset(name):
+	#print("try select " + name)
+	var preset = loadFile(name)
+	if preset == null:
+		return
+	#print("select: ",id)
+	resetBtns("none")
+	clearAudio()
+	#Main settings
+	map = preset.map
+	section = preset.section
+	%map_option.select(arrMaps.split(" ").find(map))
+	%section_option.select(sectionNames.find(section))
+	changeLevel(arrMaps.split(" ").find(map))
+
+	#additional settings
+	loadVolumeSettings(preset.volume)
+	
+	speed = float(preset.speed)
+	%speedLabel.text = "Speed (x"+str(speed)+")"
+	%speedSlider.value = speed*100
+	#
+	time = float(preset.time)
+	%timeNow.text = str(time)
+	%slider_timeline.value = time
+	#
+	repeat = int(preset.repeat)
+	%check_repeat.texture_normal = load("res://src/img/ui/icons/"+repeatArr[repeat]+".png")
+	#
+	solo = int(preset.solo)
+	%check_solo.texture_normal = load("res://src/img/ui/icons/"+soloArr[solo]+".png")
+	#
+	debuffVol = preset.debuffVol 
+	%volumeFix.button_pressed = debuffVol
+	checkBtns()
+	loadPlaylist(preset.btns)
+	return
+
+func loadVolumeSettings(volSettings):
+	var volumes = volSettings
+	var container = %VolumeMixer.get_children(false)
+	var chars = ("all idle static "+arrChar).split(" ")
+	var index = 0
+	for char in chars:
+		container[index].get_child(1).value = volumes[char]
+		index+=1
+
+###
+func saveFile(name, content):
+	print("Save somthing in " + path_presetsFiles+%PresetsPath.text + " as " + name + "\nContent: " + str(content))
+	var file = FileAccess.open(path_presetsFiles+%PresetsPath.text+name+".tfhp",FileAccess.WRITE)
+	file.store_var(content)
+	file = null
+
+func loadFile(name):
+	print("Load somthing from " + path_presetsFiles+%PresetsPath.text + " as " + name)
+	var file = FileAccess.open(path_presetsFiles+%PresetsPath.text+name+".tfhp",FileAccess.READ)
+	if file == null:
+		%AcceptDialog.position = get_screen_position()
+		%AcceptDialog.dialog_text = str(path_presetsFiles+%PresetsPath.text+name+".tfhp" + " not correct!")
+		%AcceptDialog.visible = true
+	else:
+		var content = file.get_var()
+		return content
+	
+func removeFile(path):
+	print("Remove file at " + path)
+	OS.move_to_trash(path)
+
+func getListFilePresets():
+	return DirAccess.get_files_at(path_presetsFiles+%PresetsPath.text)
+
+# Обновление списка пресетов
+func reloadPresetList():
+	%LinkFolderPresets.uri = path_presetsFiles+%PresetsPath.text
+	var remList = %listPresets.get_child_count(false)
+	#print(range(remList-1, 1 , -1))
+	var remListAsObj = %listPresets.get_tree()
+	for rem in range(remList-1, 0 , -1):
+		print_debug(%listPresets.get_child(rem))
+		%listPresets.get_child(rem).queue_free()
+	print(getListFilePresets())
+	#print(remList)
+	for folder in DirAccess.get_directories_at(path_presetsFiles+%PresetsPath.text):
+		var folderElem = HBoxContainer.new()
+		
+		var newFolder = Button.new()
+		newFolder.text = folder
+		newFolder.icon = load("res://src/img/ui/additions/folder.png")
+		newFolder.name = "folder_" + folder
+		newFolder.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		newFolder.button_up.connect(forwardFolder.bind(folder))
+		folderElem.add_child(newFolder)
+		
+		
+		var folder_remBtn = TextureButton.new()
+		folder_remBtn.size_flags_horizontal = Control.SIZE_SHRINK_END
+		folder_remBtn.texture_normal = load("res://src/img/ui/icons/circle_off.png")
+		folder_remBtn.button_up.connect(preRemoveFolder.bind(path_presetsFiles+%PresetsPath.text+folder))
+		folderElem.add_child(folder_remBtn)
+		
+		%listPresets.add_child(folderElem)
+		
+		
+	for elem in getListFilePresets():
+		var preset_elem = HBoxContainer.new()
+		var name = elem.split(".tfhp")[0]
+		
+		var preset_button = Button.new()
+		preset_button.icon = load("res://src/img/ui/additions/files.png")
+		preset_button.text = name
+		preset_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		preset_button.button_up.connect(selectPreset.bind(name))
+		preset_elem.add_child(preset_button)
+		
+		var preset_editBtn = TextureButton.new()
+		preset_editBtn.size_flags_horizontal = Control.SIZE_SHRINK_END
+		preset_editBtn.texture_normal = load("res://src/img/ui/icons/repeat.png")
+		preset_editBtn.button_up.connect(editPreset.bind(name))
+		preset_elem.add_child(preset_editBtn)
+		
+		var preset_remBtn = TextureButton.new()
+		preset_remBtn.size_flags_horizontal = Control.SIZE_SHRINK_END
+		preset_remBtn.texture_normal = load("res://src/img/ui/icons/circle_off.png")
+		preset_remBtn.button_up.connect(removePreset.bind(name))
+		preset_elem.add_child(preset_remBtn)
+		
+		%listPresets.add_child(preset_elem)
+	
+func editPreset(name):
+	removePreset(name)
+	addPreset(name)
+	reloadPresetList()
+
+func _on_btn_list_add_preset_pressed(toggle):
+	%popup_addPreset.visible = toggle
+	%edit_presetName.text = "new_preset"
+	pass # Replace with function body.
+
+
+func _on_open_presets_toggled(button_pressed):
+	%presets_window.visible = button_pressed
+	
+	reloadPresetList()
+	pass # Replace with function body.
+
+
+func _on_close_presets_window_pressed():
+	%openPresets.button_pressed = false
+	%presets_window.visible = false
+	pass # Replace with function body.
+
+
+func _on_back_folder_pressed():
+	if %PresetsPath.text == "/presets/":
+		pass
+	else:
+		var oldPath = %PresetsPath.text.trim_suffix("/").split("/")
+		oldPath.remove_at(oldPath.size()-1)
+		var newPath = ""
+		for folder in oldPath:
+			if folder != "":
+				newPath += "/" + folder
+		%PresetsPath.text = newPath + "/"
+	reloadPresetList()
+	pass # Replace with function body.
+
+func forwardFolder(folder):
+	var oldPath = %PresetsPath.text
+	var newPath = oldPath + folder + "/"
+	%PresetsPath.text = newPath
+	reloadPresetList()
 	pass # Replace with function body.

@@ -7,4 +7,4 @@ pitch_scale = 0.75
 [resource]
 bus/0/volume_db = -0.328256
 bus/0/effect/0/effect = SubResource("AudioEffectPitchShift_j8f1s")
-bus/0/effect/0/enabled = true
+bus/0/effect/0/enabled = false

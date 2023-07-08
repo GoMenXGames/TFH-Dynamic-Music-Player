@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://riq4laevjead"]
+[gd_scene load_steps=42 format=3 uid="uid://riq4laevjead"]
 
 [ext_resource type="Texture2D" uid="uid://ba2nbhxhnwyq1" path="res://src/img/ui/hud_red.png" id="1_hkxht"]
 [ext_resource type="Texture2D" uid="uid://bijpx3gkq538q" path="res://src/img/maps/other/training.png" id="1_jl6ye"]
@@ -19,9 +19,10 @@
 [ext_resource type="Texture2D" uid="uid://eq43idq470w6" path="res://src/img/ui/media/forward.png" id="10_piqh3"]
 [ext_resource type="Texture2D" uid="uid://jpggm4kpo4kf" path="res://src/img/ui/icons/options.png" id="13_k4clw"]
 [ext_resource type="Texture2D" uid="uid://o40ykr6wwuog" path="res://src/img/ui/icons/arrowBack.png" id="18_18na3"]
-[ext_resource type="Texture2D" uid="uid://dhbkdfrhxn2ne" path="res://src/img/ui/icons/Overlay.png" id="19_d38sv"]
 [ext_resource type="Texture2D" uid="uid://b780uxf56mfn" path="res://src/img/ui/icons/check_on.png" id="20_kmjww"]
 [ext_resource type="Texture2D" uid="uid://df64g661742rb" path="res://src/img/ui/icons/check_off.png" id="21_n41we"]
+[ext_resource type="Texture2D" uid="uid://bjfimatrtd3ru" path="res://src/img/ui/icons/circle_off.png" id="23_oh1kb"]
+[ext_resource type="Theme" uid="uid://xch1qaf7qwly" path="res://WindowTheme.tres" id="23_v4k0x"]
 
 [sub_resource type="Theme" id="Theme_58ylk"]
 OptionButton/constants/h_separation = 0
@@ -80,9 +81,42 @@ events = [SubResource("InputEventKey_b1p2g")]
 [sub_resource type="Theme" id="Theme_llu4s"]
 Button/styles/focus = SubResource("StyleBoxFlat_usjlg")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_70gcq"]
+bg_color = Color(0, 0, 0, 1)
+border_width_top = 3
+border_width_bottom = 3
+border_color = Color(0.678431, 0, 0.258824, 1)
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+shadow_size = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3kfge"]
+bg_color = Color(0, 0, 0, 0.501961)
+border_width_top = 3
+border_width_bottom = 3
+border_color = Color(0.678431, 0, 0.258824, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_size = 16
+
+[sub_resource type="Theme" id="Theme_hrhjf"]
+Panel/styles/panel = SubResource("StyleBoxFlat_70gcq")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_3kfge")
+
 [sub_resource type="Theme" id="Theme_0gv0a"]
 CheckBox/icons/checked = ExtResource("20_kmjww")
 CheckBox/icons/unchecked = ExtResource("21_n41we")
+
+[sub_resource type="SystemFont" id="SystemFont_2xt5x"]
+font_names = PackedStringArray("Impact")
+
+[sub_resource type="LabelSettings" id="LabelSettings_exdy4"]
+font = SubResource("SystemFont_2xt5x")
+font_size = 28
+font_color = Color(0.678431, 0, 0.258824, 1)
+outline_size = 4
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -423,12 +457,6 @@ size_flags_vertical = 4
 theme = SubResource("Theme_llu4s")
 icon = ExtResource("10_piqh3")
 
-[node name="AcceptDialog" type="AcceptDialog" parent="."]
-unique_name_in_owner = true
-initial_position = 2
-mode = 3
-content_scale_mode = 2
-
 [node name="backBtn" type="TextureButton" parent="."]
 layout_mode = 0
 offset_left = 8.0
@@ -439,7 +467,7 @@ texture_normal = ExtResource("18_18na3")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="volumeMixContainer" type="TextureRect" parent="."]
+[node name="volumeMixContainer" type="Panel" parent="."]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -449,18 +477,17 @@ offset_top = 184.0
 offset_right = 304.0
 offset_bottom = -184.0
 grow_vertical = 2
-texture = ExtResource("19_d38sv")
-expand_mode = 1
+theme = SubResource("Theme_hrhjf")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="volumeMixContainer"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 4.0
-offset_right = -4.0
-offset_bottom = -4.0
+offset_left = 7.0
+offset_top = 9.0
+offset_right = -7.0
+offset_bottom = -9.0
 grow_horizontal = 2
 grow_vertical = 2
 horizontal_scroll_mode = 3
@@ -473,31 +500,33 @@ size_flags_horizontal = 6
 size_flags_vertical = 6
 alignment = 1
 
-[node name="additionConfigContainer" type="TextureRect" parent="."]
+[node name="additionConfigContainer" type="Panel" parent="."]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -215.0
-offset_top = 359.0
-offset_bottom = -359.0
-grow_horizontal = 0
+anchor_bottom = 0.5
+offset_left = -223.0
+offset_top = -70.0
+offset_bottom = 70.0
+grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("19_d38sv")
-expand_mode = 1
+theme = ExtResource("23_v4k0x")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="additionConfigContainer"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 11.0
-offset_top = 8.0
-offset_right = -10.0
-offset_bottom = -8.0
+anchor_bottom = 0.5
+offset_left = -215.0
+offset_top = -61.0
+offset_right = -7.0
+offset_bottom = 61.0
 grow_horizontal = 2
 grow_vertical = 2
 horizontal_scroll_mode = 3
@@ -516,6 +545,7 @@ size_flags_horizontal = 4
 text = "speed (x1.0)"
 
 [node name="speedSlider" type="HSlider" parent="additionConfigContainer/ScrollContainer/elements"]
+unique_name_in_owner = true
 layout_mode = 2
 min_value = 50.0
 max_value = 200.0
@@ -524,6 +554,7 @@ tick_count = 4
 ticks_on_borders = true
 
 [node name="volumeFix" type="CheckBox" parent="additionConfigContainer/ScrollContainer/elements"]
+unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "If you select more
 than one icon, the
@@ -532,6 +563,165 @@ with each additional
 icon selected."
 theme = SubResource("Theme_0gv0a")
 text = "Anti-deaf mode"
+
+[node name="openPresets" type="Button" parent="additionConfigContainer/ScrollContainer/elements"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+text = "Presets"
+
+[node name="presets_window" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.502
+anchor_right = 0.502
+anchor_bottom = 1.0
+offset_left = -218.2
+offset_top = 179.0
+offset_right = 217.8
+offset_bottom = -198.0
+theme = ExtResource("23_v4k0x")
+
+[node name="MarginContainer" type="MarginContainer" parent="presets_window"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="presets_window/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="presets_window/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "PRESETS"
+label_settings = SubResource("LabelSettings_exdy4")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="presets_window/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="backFolder" type="Button" parent="presets_window/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "<"
+
+[node name="PresetsPath" type="LineEdit" parent="presets_window/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "/presets/"
+editable = false
+
+[node name="ScrollContainer" type="ScrollContainer" parent="presets_window/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="listPresets" type="VBoxContainer" parent="presets_window/MarginContainer/VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="btn_listAddPreset" type="Button" parent="presets_window/MarginContainer/VBoxContainer/ScrollContainer/listPresets"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+text = "New"
+
+[node name="LinkFolderPresets" type="LinkButton" parent="presets_window/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+text = "Open folder..."
+underline = 1
+uri = "C:\\Users\\vlasu\\Documents\\My Games\\Them's Fightin' Herds\\"
+
+[node name="closePresetsWindow" type="TextureButton" parent="presets_window/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+texture_normal = ExtResource("23_oh1kb")
+stretch_mode = 3
+
+[node name="popup_addPreset" type="Panel" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -203.0
+offset_top = -59.0
+offset_right = 203.0
+offset_bottom = 59.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 0
+theme = ExtResource("23_v4k0x")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="popup_addPreset"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 8.0
+offset_right = -5.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="popup_addPreset/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Add new"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="popup_addPreset/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Label2" type="Label" parent="popup_addPreset/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "File (.tfhp)"
+
+[node name="switchFileFolder" type="CheckButton" parent="popup_addPreset/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Label" type="Label" parent="popup_addPreset/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Folder"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="popup_addPreset/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 10
+
+[node name="edit_presetName" type="LineEdit" parent="popup_addPreset/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "new_preset_1"
+placeholder_text = "new preset name"
+
+[node name="btn_addPreset" type="Button" parent="popup_addPreset/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Add"
+
+[node name="AcceptDialog" type="AcceptDialog" parent="popup_addPreset/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+popup_window = true
+content_scale_mode = 2
+dialog_close_on_escape = false
+dialog_autowrap = true
 
 [connection signal="pressed" from="header_bg/header/check_repeat" to="ScrollContainer/btnsVbox/char_grid" method="_on_check_repeat_toggled"]
 [connection signal="item_selected" from="header_bg/header/VBoxContainer/map_option" to="ScrollContainer/btnsVbox/char_grid" method="_on_map_option_item_selected"]
@@ -550,3 +740,8 @@ text = "Anti-deaf mode"
 [connection signal="pressed" from="backBtn" to="ScrollContainer/btnsVbox/char_grid" method="_on_quit_btn_pressed"]
 [connection signal="value_changed" from="additionConfigContainer/ScrollContainer/elements/speedSlider" to="ScrollContainer/btnsVbox/char_grid" method="_on_speed_slider_value_changed"]
 [connection signal="toggled" from="additionConfigContainer/ScrollContainer/elements/volumeFix" to="ScrollContainer/btnsVbox/char_grid" method="_on_volume_fix_toggled"]
+[connection signal="toggled" from="additionConfigContainer/ScrollContainer/elements/openPresets" to="ScrollContainer/btnsVbox/char_grid" method="_on_open_presets_toggled"]
+[connection signal="pressed" from="presets_window/MarginContainer/VBoxContainer/HBoxContainer/backFolder" to="ScrollContainer/btnsVbox/char_grid" method="_on_back_folder_pressed"]
+[connection signal="toggled" from="presets_window/MarginContainer/VBoxContainer/ScrollContainer/listPresets/btn_listAddPreset" to="ScrollContainer/btnsVbox/char_grid" method="_on_btn_list_add_preset_pressed"]
+[connection signal="pressed" from="presets_window/MarginContainer/closePresetsWindow" to="ScrollContainer/btnsVbox/char_grid" method="_on_close_presets_window_pressed"]
+[connection signal="pressed" from="popup_addPreset/VBoxContainer/HBoxContainer/btn_addPreset" to="ScrollContainer/btnsVbox/char_grid" method="_on_btn_add_preset_pressed"]
