@@ -3,7 +3,7 @@
 ## Description:
 - Idea by [Kosmen21](https://www.youtube.com/c/Kosmen21)
 - Engine: [**Godot 4.1**](https://godotengine.org/)
-- All images and music own by [Mane6](https://www.mane6.com/) & [Modus](https://modusgames.com/) ([RainbowCrash88](https://www.youtube.com/RainbowCrash88) & [Whitetail](https://www.youtube.com/@WhitetailMusic))
+- All **images** & **music** been getted from _game_ and **own** by [Mane6](https://www.mane6.com/) & [Modus](https://modusgames.com/) ([RainbowCrash88](https://www.youtube.com/RainbowCrash88) & [Whitetail](https://www.youtube.com/@WhitetailMusic))
 
 ### BUY GAME IN STEAM: [Them's Fightin' Herds _on Steam_](https://store.steampowered.com/app/574980/Thems_Fightin_Herds/)
 
