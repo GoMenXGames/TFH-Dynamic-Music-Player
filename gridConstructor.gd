@@ -630,9 +630,9 @@ func _on_quit_btn_pressed():
 
 func _on_option_btn_toggled(button_pressed):
 	if button_pressed:
-		%additionConfigContainer.z_index = 0
+		%additionConfigContainer.offset_left = -233
 	else:
-		%additionConfigContainer.z_index = -1
+		%additionConfigContainer.offset_left = 1000
 	
 	pass # Replace with function body.
 
