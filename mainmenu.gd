@@ -3,6 +3,10 @@ extends Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	var userfolder = OS.get_user_data_dir()
+	print (userfolder)
+	var user = userfolder.split("/")[2]
+	print (user)
 	pass # Replace with function body.
 
 

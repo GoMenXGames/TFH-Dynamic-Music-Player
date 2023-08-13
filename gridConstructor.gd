@@ -9,6 +9,15 @@ var sectionNames = ["s1","s2","kc"]
 var arrMaps = "ari ole pap pom tian txs velv shan"
 
 var repeatArr = ["playOnce", "repeat", "repeatOne"]
+var repeatArrText = [
+	"The repeat of music is disabled, 
+	when the song ends, 
+	the pause will automatically turn on",
+	"Music will be repeated
+	on the same round",
+	"Music will be cyclically repeated
+	in the order of rounds"
+]
 
 var audioFiles = []
 
@@ -16,7 +25,7 @@ var last_btn = "none"
 var map = "none"
 var section = "none"
 
-var username = OS.get_environment("USERNAME")
+var username = OS.get_user_data_dir().split("/")[2]
 var path_presetsFiles = "C:\\Users\\"+username+"\\Documents\\TFH Dynamic Music Player"
 var presets = []
 
@@ -46,6 +55,7 @@ func genMapBasedBtn():
 		#Визуал
 		newBtn.texture_pressed = load("res://src/img/icons/"+btn+".png");
 		newBtn.texture_normal = load("res://src/img/icons/"+btn+"_gray.png");
+		newBtn.tooltip_text = btn
 		
 		newBtn.texture_disabled = load("res://src/img/icons/"+btn+"_lock.png");
 		newBtn.add_to_group("g_music_btn")
@@ -60,6 +70,7 @@ func genCharBtn():
 		newBtn.toggle_mode = true
 		newBtn.disabled = true
 		newBtn.name = "btn_" + char
+		newBtn.tooltip_text = char
 		newBtn.pressed.connect(btn_pressed.bind(char))
 		#Визуал
 		newBtn.texture_pressed = load("res://src/img/icons/"+char+".png");
@@ -78,10 +89,12 @@ func genCharMixer():
 		newVBox.name = "vbox_" + char
 		
 		#Image
-		var newImg = TextureRect.new()
+		var newImg = TextureButton.new()
 		newImg.name = "img_" + char
-		newImg.texture = load("res://src/img/icons/volume/"+char+".png");
+		newImg.texture_normal = load("res://src/img/icons/volume/"+char+".png");
+		newImg.pressed.connect(resetCharVol.bind(char))
 		newVBox.add_child(newImg)
+		newImg.tooltip_text = "Click to reset volume!"
 		
 		#Slider
 		var newSlider = HSlider.new()
@@ -106,22 +119,34 @@ func genCharMixer():
 ###
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	DirAccess.open("user://")
+	if FileAccess.file_exists("user://settings.ini"):
+		print("kek it works!")
+		path_presetsFiles = loadSettings()
+		reloadPresetList()
+	else:
+		%lineEdit_pathFolder.text = path_presetsFiles
+		%popup_changeFolderPresets.visible = true
+		print("fuck up!")
+	getFolder()
 	genMapBasedBtn() # Static and Idle
 	genCharBtn() # create chars
 	genCharMixer() # create chars
 	loadMaps() #bg change
 	getNameSect(%section_option.selected)
 	checkBtns()
-	if DirAccess.dir_exists_absolute(path_presetsFiles+"/presets/"):
+	if DirAccess.dir_exists_absolute(path_presetsFiles):
 		print("folder exits")
 #		presets = load_presets()
 	else:
 		print("Create folder")
-		DirAccess.make_dir_recursive_absolute(path_presetsFiles+"/presets/")
+		DirAccess.make_dir_recursive_absolute(path_presetsFiles)
 	reloadPresetList() #old
-	%LinkFolderPresets.uri = path_presetsFiles+"/presets/"
+	%LinkFolderPresets.uri = path_presetsFiles
 	print_debug(getListFilePresets())
 	
+func getFolder():
+	pass
 	
 func _notification(what):
 	match what:
@@ -419,6 +444,18 @@ func getCharVol(char):
 			#print(slider.name)
 			return slider
 
+func resetCharVol(char):
+	volumeChanged(0, char)
+	var container = %VolumeMixer.get_children(false)
+	var chars = ("all idle static "+arrChar).split(" ")
+	var index = 0
+	for volSlider in container:
+		#print_debug(volSlider)
+		if volSlider.name.split("_")[1] == char:
+			volSlider.get_child(1).value = 0
+			#print_debug(volSlider)
+	
+
 func volumeChanged(dbValue, char):
 	if (dbValue < -49):
 		dbValue = -99999
@@ -468,6 +505,7 @@ func _on_play_btn_toggled(button_pressed):
 
 
 func _on_check_repeat_toggled():
+	
 #	#print(repeatArr.size(), ", ", repeat)
 	if repeatArr.size() > repeat+1:
 #		#print("+1")
@@ -477,9 +515,21 @@ func _on_check_repeat_toggled():
 		repeat = 0
 	#print(repeatArr[repeat])
 	%check_repeat.texture_normal = load("res://src/img/ui/icons/"+repeatArr[repeat]+".png")
+	%check_repeat.tooltip_text = repeatArrText[repeat]
 	pass # Replace with function body.
 
 var soloArr = ["lock_white", "lock_green", "lock_red"]
+var soloArrText = [
+	"You can choose as many
+	music icons as you can",
+	"Icons you have selected
+	will remain active, 
+	and you will be able to
+	select an additional icon 
+	that will already turn off 
+	if you select another one",
+	"You can select only one icon"
+]
 
 func _on_check_solo_pressed():
 	if soloArr.size() > solo+1:
@@ -489,6 +539,7 @@ func _on_check_solo_pressed():
 #		#print("=0")
 		solo = 0
 	#print(soloArr[solo])
+	%check_solo.tooltip_text = soloArrText[solo]
 	%check_solo.texture_normal = load("res://src/img/ui/icons/"+soloArr[solo]+".png")
 	if solo == 1:
 		#print("btn_solo")
@@ -579,9 +630,9 @@ func _on_quit_btn_pressed():
 
 func _on_option_btn_toggled(button_pressed):
 	if button_pressed:
-		%additionConfigContainer.show()
+		%additionConfigContainer.z_index = 0
 	else:
-		%additionConfigContainer.hide()
+		%additionConfigContainer.z_index = -1
 	
 	pass # Replace with function body.
 
@@ -845,6 +896,28 @@ func editPreset(name):
 	addPreset(name)
 	reloadPresetList()
 
+func saveSettings(content):
+	var path = "user://settings.ini"
+	var file = FileAccess.open(path,FileAccess.WRITE)
+	file.store_var(content)
+	file = null
+	pass
+
+func loadSettings():
+	var path = "user://settings.ini"
+	FileAccess.file_exists(path)
+	var file = FileAccess.open(path,FileAccess.READ)
+	if file == null:
+		print ("error", path)
+		pass
+		#%AcceptDialog.position = get_screen_position()
+		#%AcceptDialog.dialog_text = str(path_presetsFiles+%PresetsPath.text+name+".tfhp" + " not correct!")
+		#%AcceptDialog.visible = true
+	else:
+		var content = file.get_var()
+		return content
+	pass
+
 func _on_btn_list_add_preset_pressed(toggle):
 	%popup_addPreset.visible = toggle
 	%edit_presetName.text = "new_preset"
@@ -865,7 +938,7 @@ func _on_close_presets_window_pressed():
 
 
 func _on_back_folder_pressed():
-	if %PresetsPath.text == "/presets/":
+	if %PresetsPath.text == "/":
 		pass
 	else:
 		var oldPath = %PresetsPath.text.trim_suffix("/").split("/")
@@ -883,4 +956,27 @@ func forwardFolder(folder):
 	var newPath = oldPath + folder + "/"
 	%PresetsPath.text = newPath
 	reloadPresetList()
+	pass # Replace with function body.
+
+
+func _on_btn_select_folder_pressed():
+	var text = %lineEdit_pathFolder.text
+	print (DirAccess.dir_exists_absolute(text))
+	if text != "" and DirAccess.dir_exists_absolute(text):
+		path_presetsFiles = text
+		saveSettings(path_presetsFiles)
+		%PresetsPath.text = "/"
+		reloadPresetList()
+		%popup_changeFolderPresets.visible = false
+	pass # Replace with function body.
+
+
+func _on_btn_change_folder_presets_pressed():
+	%lineEdit_pathFolder.text = path_presetsFiles
+	%popup_changeFolderPresets.visible = true
+	pass # Replace with function body.
+
+
+func _on_btn_close_add_preset_pressed():
+	%popup_addPreset.visible = false
 	pass # Replace with function body.

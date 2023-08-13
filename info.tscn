@@ -1,9 +1,26 @@
-[gd_scene load_steps=5 format=3 uid="uid://ba520fhn75g82"]
+[gd_scene load_steps=11 format=3 uid="uid://ba520fhn75g82"]
 
 [ext_resource type="Script" path="res://info.gd" id="1_wdk2u"]
 [ext_resource type="Texture2D" uid="uid://cscq2r743gohb" path="res://src/img/ui/hud_wide.png" id="2_intlq"]
 [ext_resource type="Texture2D" uid="uid://dhbkdfrhxn2ne" path="res://src/img/ui/icons/Overlay.png" id="2_jmsri"]
 [ext_resource type="Texture2D" uid="uid://o40ykr6wwuog" path="res://src/img/ui/icons/arrowBack.png" id="3_u5rt1"]
+[ext_resource type="Texture2D" uid="uid://fyxsxtn6shib" path="res://src/img/ui/icons/on.png" id="5_066ge"]
+[ext_resource type="Theme" uid="uid://cktiaxhkanqmp" path="res://btns.tres" id="5_q01n2"]
+[ext_resource type="Texture2D" uid="uid://4sqvmltwqdq2" path="res://src/img/ui/icons/off.png" id="6_l0nxl"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uxf08"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+
+[sub_resource type="Theme" id="Theme_jr32e"]
+CheckButton/icons/checked = ExtResource("5_066ge")
+CheckButton/icons/unchecked = ExtResource("6_l0nxl")
+CheckButton/styles/focus = SubResource("StyleBoxEmpty_uxf08")
+
+[sub_resource type="Theme" id="Theme_6kgkc"]
+Label/constants/line_spacing = 2
 
 [node name="info" type="Control"]
 layout_mode = 3
@@ -37,30 +54,6 @@ grow_vertical = 2
 texture = ExtResource("2_intlq")
 expand_mode = 2
 
-[node name="Label" type="Label" parent="."]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 109.0
-offset_top = 193.0
-offset_right = -109.0
-offset_bottom = -193.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "All the music used in this app is entirely owned by RainbowCrash88 & Whitetail.
-
-This application was created in order to show how much work was done by the composers in Them's Fightin' Herds, in terms of dynamic music. It will be a discovery for new listeners, and for those who already know about it, they will be able to use this application to listen to their favorite tracks. You can also combine character themes. We recommend using headphones.
-
-P.S.
-This application was built strictly on the use of game files to achieve maximum purity of tracks.
-In this application, the locks on the icons mean that there are no such tracks in the game files, or I just didn't find it :/"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
-language = "ru_RU"
-
 [node name="backBtn" type="TextureButton" parent="."]
 layout_mode = 1
 offset_left = 18.0
@@ -89,10 +82,80 @@ text = "ENG"
 
 [node name="lang_switch" type="CheckButton" parent="HBoxContainer"]
 layout_mode = 2
+theme = SubResource("Theme_jr32e")
 
 [node name="Label" type="Label" parent="HBoxContainer"]
 layout_mode = 2
 text = "RUS"
 
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = 119.0
+offset_right = -18.0
+offset_bottom = -119.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label1" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+theme = SubResource("Theme_6kgkc")
+text = "All the music used in this app is entirely owned by RainbowCrash88 & Whitetail."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+language = "ru_RU"
+
+[node name="vButtons" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 1
+
+[node name="btnBuySteam" type="Button" parent="VBoxContainer/vButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 6
+tooltip_text = "https://store.steampowered.com/app/1144180/Thems_Fightin_Herds__Official_Soundtrack/"
+theme = ExtResource("5_q01n2")
+text = "Buy soundtracks in Steam"
+
+[node name="btnBuyMane6" type="Button" parent="VBoxContainer/vButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 6
+tooltip_text = "https://www.mane6.com/media/#soundtrack"
+theme = ExtResource("5_q01n2")
+text = "Buy soundtracks in mane6.com"
+
+[node name="Label2" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+theme = SubResource("Theme_6kgkc")
+text = "This application was created in order to show how much work was done by the composers in Them's Fightin' Herds, in terms of dynamic music. It will be a discovery for new listeners, and for those who already know about it, they will be able to use this application to listen to their favorite tracks. You can also combine character themes. We recommend using headphones.
+
+P.S.
+This application was built strictly on the use of game files to achieve maximum purity of tracks.
+In this application, the locks on the icons mean that there are no such tracks in the game files, or I just didn't find it :/
+
+P.P.S. 
+Bronze icons means that track was recorded in game.
+
+NOT AN OFFICIAL Them's Fightin' Herds PRODUCT.
+NOT APPROVED BY OR ASSOCIATED WITH MANE6 OR MODUS."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+language = "ru_RU"
+
 [connection signal="pressed" from="backBtn" to="." method="_on_texture_button_pressed"]
 [connection signal="toggled" from="HBoxContainer/lang_switch" to="." method="_on_lang_switch_toggled"]
+[connection signal="pressed" from="VBoxContainer/vButtons/btnBuySteam" to="." method="_on_btn_buy_steam_pressed"]
+[connection signal="pressed" from="VBoxContainer/vButtons/btnBuyMane6" to="." method="_on_btn_buy_mane_6_pressed"]
