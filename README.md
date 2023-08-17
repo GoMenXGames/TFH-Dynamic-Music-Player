@@ -21,14 +21,14 @@ You can also combine character themes.
 
 ### BUY GAME IN STEAM: [Them's Fightin' Herds _on Steam_](https://store.steampowered.com/app/574980/Thems_Fightin_Herds/)
 
-### System requirements (Recommend):
+## System requirements (Recommend):
 - OS: Windows 10+ 64bit
 - CPU: 2-core CPU with 2 GHz
 - RAM: 4GB+
 - GPU: 1GB+ VRAM
 - HDD: 3GB+ (SSD for Faster Launch) (Most of the program's volume is occupied by music files)
 
-### Download:
+## Download:
 -  [Google Drive](https://drive.google.com/drive/folders/1e-sJHB-511NZR43Xj7vNI6uiOwyd2lsa?usp=drive_link)
 
 ## Images
