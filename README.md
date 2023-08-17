@@ -1,15 +1,32 @@
 # TFH: Dynamic Music Player
 
 ## Description:
-- Idea by [Kosmen21](https://www.youtube.com/c/Kosmen21)
+This application was created in order to show how much work was done by the composers in **Them's Fightin' Herds**, in terms of _dynamic_ music. 
+It will be a discovery for new listeners, and for those who already know about it, they will be able to use this application to listen to their favorite tracks. 
+You can also combine character themes. 
+#### **_We recommend using headphones_**.
+
+
+## Credits:
+#### [GoMenXGames](https://github.com/GoMenXGames)
+> - Coding
+> - UI Maker
+
+#### [Kosmen21](https://www.youtube.com/c/Kosmen21)
+> - Music Render
+> - Program Concept
+
 - Engine: [**Godot 4.1**](https://godotengine.org/)
 - All **images** & **music** been getted from _game_ and **own** by [Mane6](https://www.mane6.com/) & [Modus](https://modusgames.com/) ([RainbowCrash88](https://www.youtube.com/RainbowCrash88) & [Whitetail](https://www.youtube.com/@WhitetailMusic))
 
 ### BUY GAME IN STEAM: [Them's Fightin' Herds _on Steam_](https://store.steampowered.com/app/574980/Thems_Fightin_Herds/)
 
-### System requirements: 
-- **OS**: Windows 10+ 64bit
-- **Space required**: 2.5 GB+ (Most of the program's volume is occupied by music files)
+### System requirements (Recommend):
+- OS: Windows 10+ 64bit
+- CPU: 2-core CPU with 2 GHz
+- RAM: 4GB+
+- GPU: 1GB+ VRAM
+- HDD: 3GB+ (SSD for Faster Launch) (Most of the program's volume is occupied by music files)
 
 ### Download:
 -  [Google Drive](https://drive.google.com/drive/folders/1e-sJHB-511NZR43Xj7vNI6uiOwyd2lsa?usp=drive_link)
