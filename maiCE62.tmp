@@ -1,0 +1,175 @@
+[gd_scene load_steps=12 format=3 uid="uid://brbsavupp46c0"]
+
+[ext_resource type="Script" path="res://mainmenu.gd" id="1_6h84s"]
+[ext_resource type="Texture2D" uid="uid://c7g327fw1srjn" path="res://src/img/albumLogo.jpg" id="2_diq7p"]
+[ext_resource type="Texture2D" uid="uid://dhbkdfrhxn2ne" path="res://src/img/ui/icons/Overlay.png" id="2_pt44m"]
+[ext_resource type="Texture2D" uid="uid://dre6mi2fn5bh" path="res://src/img/ui/icons/go.png" id="3_s2inm"]
+[ext_resource type="Texture2D" uid="uid://s3jxo2kokl7b" path="res://src/img/ui/icons/INFO.png" id="4_88bnk"]
+[ext_resource type="Texture2D" uid="uid://l3yveenuwhod" path="res://src/img/ui/icons/PredsLeft.png" id="5_e8mww"]
+[ext_resource type="Texture2D" uid="uid://blg20x00hoeb0" path="res://src/img/ui/icons/PredsRight.png" id="6_02w8h"]
+[ext_resource type="Texture2D" uid="uid://djbovpfyn8lgk" path="res://src/img/ui/icons/go_hover.png" id="7_28qsi"]
+[ext_resource type="Texture2D" uid="uid://dwtt1n8v8u3rm" path="res://src/img/ui/icons/INFO_hover.png" id="9_6cain"]
+[ext_resource type="Texture2D" uid="uid://csqls7mb8u2tj" path="res://yt.png" id="10_5t74n"]
+[ext_resource type="Texture2D" uid="uid://c7p53jxukb30" path="res://github_white.png" id="11_7sgq4"]
+
+[node name="mainmenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_6h84s")
+
+[node name="Overlay" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -340.0
+offset_right = 340.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_pt44m")
+
+[node name="AlbumLogo" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -202.0
+offset_top = -364.0
+offset_right = 202.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture = ExtResource("2_diq7p")
+expand_mode = 1
+
+[node name="PredsLeft" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 200.0
+grow_vertical = 2
+texture = ExtResource("5_e8mww")
+
+[node name="PredsRight" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -269.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("6_02w8h")
+
+[node name="StartBtn" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -101.5
+offset_top = 57.0
+offset_right = 101.5
+offset_bottom = 203.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture_normal = ExtResource("3_s2inm")
+texture_hover = ExtResource("7_28qsi")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="InfoBtn" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -134.0
+offset_top = 255.0
+offset_right = 135.0
+offset_bottom = 308.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture_normal = ExtResource("4_88bnk")
+texture_hover = ExtResource("9_6cain")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -27.5
+offset_top = -40.0
+offset_right = 27.5
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Idea by: "
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("10_5t74n")
+expand_mode = 3
+
+[node name="LinkButton2" type="LinkButton" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Kosmen21"
+underline = 1
+uri = "https://www.youtube.com/@Kosmen21"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Code by: "
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+texture = ExtResource("11_7sgq4")
+expand_mode = 3
+
+[node name="LinkButton2" type="LinkButton" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "GoMenXGames"
+underline = 1
+uri = "https://github.com/GoMenXGames/TFH-Dynamic-Music-Player"
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+tooltip_text = "The work has been started since the beginning of April 2023"
+mouse_filter = 1
+text = "v.1.0 (Release)"
+
+[connection signal="pressed" from="StartBtn" to="." method="_on_texture_button_pressed"]
+[connection signal="pressed" from="InfoBtn" to="." method="_on_info_btn_pressed"]

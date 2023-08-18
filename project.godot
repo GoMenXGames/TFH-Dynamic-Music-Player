@@ -16,11 +16,19 @@ config/features=PackedStringArray("4.1", "GL Compatibility")
 boot_splash/image="res://TitleScreen-logo.png"
 config/icon="res://ico1.png"
 
+[autoload]
+
+DiscordSDKLoader="*res://addons/discord-sdk-gd/nodes/core_updater.gd"
+
 [display]
 
 window/size/viewport_width=600
 window/size/viewport_height=880
 window/handheld/orientation=1
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/discord-sdk-gd/plugin.cfg")
 
 [internationalization]
 

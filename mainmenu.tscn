@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://brbsavupp46c0"]
+[gd_scene load_steps=18 format=3 uid="uid://brbsavupp46c0"]
 
 [ext_resource type="Script" path="res://mainmenu.gd" id="1_6h84s"]
 [ext_resource type="Texture2D" uid="uid://c7g327fw1srjn" path="res://src/img/albumLogo.jpg" id="2_diq7p"]
@@ -11,6 +11,21 @@
 [ext_resource type="Texture2D" uid="uid://dwtt1n8v8u3rm" path="res://src/img/ui/icons/INFO_hover.png" id="9_6cain"]
 [ext_resource type="Texture2D" uid="uid://csqls7mb8u2tj" path="res://yt.png" id="10_5t74n"]
 [ext_resource type="Texture2D" uid="uid://c7p53jxukb30" path="res://github_white.png" id="11_7sgq4"]
+[ext_resource type="Texture2D" uid="uid://er7twlvcqxkg" path="res://src/img/ui/icons/maximize.png" id="12_ch0yf"]
+[ext_resource type="Texture2D" uid="uid://bbxwr5otcipyl" path="res://src/img/ui/icons/minimize.png" id="13_4vo5v"]
+[ext_resource type="Script" path="res://btn_winSize.gd" id="14_e2n3u"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_xpeuh"]
+device = -1
+keycode = 4194342
+
+[sub_resource type="InputEventKey" id="InputEventKey_rxiwx"]
+device = -1
+alt_pressed = true
+keycode = 4194309
+
+[sub_resource type="Shortcut" id="Shortcut_reasl"]
+events = [SubResource("InputEventKey_xpeuh"), SubResource("InputEventKey_rxiwx")]
 
 [node name="mainmenu" type="Control"]
 layout_mode = 3
@@ -167,9 +182,33 @@ uri = "https://github.com/GoMenXGames/TFH-Dynamic-Music-Player"
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
-tooltip_text = "The work has been started since the beginning of April 2023"
+tooltip_text = "Change log:
+- Added Discord Rich Presence
+- Added fullscreen mode"
 mouse_filter = 1
-text = "v.1.0 (Release)"
+text = "v.1.1 (Discord Rich Presence)"
+
+[node name="btn_winSize" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -57.0
+offset_top = 15.0
+offset_right = -15.0
+offset_bottom = 57.0
+grow_horizontal = 0
+tooltip_text = "Switch window mode
+Binded on \"F11\" or \"Alt + Enter\""
+toggle_mode = true
+shortcut = SubResource("Shortcut_reasl")
+shortcut_in_tooltip = false
+texture_normal = ExtResource("12_ch0yf")
+texture_pressed = ExtResource("13_4vo5v")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("14_e2n3u")
 
 [connection signal="pressed" from="StartBtn" to="." method="_on_texture_button_pressed"]
 [connection signal="pressed" from="InfoBtn" to="." method="_on_info_btn_pressed"]
+[connection signal="toggled" from="btn_winSize" to="btn_winSize" method="_on_toggled"]

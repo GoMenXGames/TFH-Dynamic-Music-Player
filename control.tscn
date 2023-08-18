@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=3 uid="uid://riq4laevjead"]
+[gd_scene load_steps=70 format=3 uid="uid://riq4laevjead"]
 
 [ext_resource type="Texture2D" uid="uid://ba2nbhxhnwyq1" path="res://src/img/ui/hud_red.png" id="1_hkxht"]
 [ext_resource type="Texture2D" uid="uid://bijpx3gkq538q" path="res://src/img/maps/other/training.png" id="1_jl6ye"]
@@ -23,6 +23,9 @@
 [ext_resource type="Texture2D" uid="uid://df64g661742rb" path="res://src/img/ui/icons/check_off.png" id="21_n41we"]
 [ext_resource type="Texture2D" uid="uid://bjfimatrtd3ru" path="res://src/img/ui/icons/circle_off.png" id="23_oh1kb"]
 [ext_resource type="Theme" uid="uid://xch1qaf7qwly" path="res://WindowTheme.tres" id="23_v4k0x"]
+[ext_resource type="Texture2D" uid="uid://er7twlvcqxkg" path="res://src/img/ui/icons/maximize.png" id="24_s2l7u"]
+[ext_resource type="Texture2D" uid="uid://bbxwr5otcipyl" path="res://src/img/ui/icons/minimize.png" id="25_vm73d"]
+[ext_resource type="Script" path="res://btn_winSize.gd" id="26_tfqtu"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_hqxja"]
 device = -1
@@ -212,6 +215,18 @@ font = SubResource("SystemFont_2xt5x")
 font_size = 28
 font_color = Color(0.678431, 0, 0.258824, 1)
 outline_size = 4
+
+[sub_resource type="InputEventKey" id="InputEventKey_xpeuh"]
+device = -1
+keycode = 4194342
+
+[sub_resource type="InputEventKey" id="InputEventKey_rxiwx"]
+device = -1
+alt_pressed = true
+keycode = 4194309
+
+[sub_resource type="Shortcut" id="Shortcut_ifpnv"]
+events = [SubResource("InputEventKey_xpeuh"), SubResource("InputEventKey_rxiwx")]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -944,6 +959,27 @@ layout_mode = 2
 size_flags_horizontal = 8
 text = "Select"
 
+[node name="btn_winSize" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -57.0
+offset_top = 15.0
+offset_right = -15.0
+offset_bottom = 57.0
+grow_horizontal = 0
+tooltip_text = "Switch window mode
+Binded on \"F11\" or \"Alt + Enter\""
+toggle_mode = true
+shortcut = SubResource("Shortcut_ifpnv")
+shortcut_in_tooltip = false
+texture_normal = ExtResource("24_s2l7u")
+texture_pressed = ExtResource("25_vm73d")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("26_tfqtu")
+
 [connection signal="pressed" from="header_bg/header/check_repeat" to="ScrollContainer/btnsVbox/char_grid" method="_on_check_repeat_toggled"]
 [connection signal="item_selected" from="header_bg/header/VBoxContainer/map_option" to="ScrollContainer/btnsVbox/char_grid" method="_on_map_option_item_selected"]
 [connection signal="item_selected" from="header_bg/header/VBoxContainer/section_option" to="ScrollContainer/btnsVbox/char_grid" method="_on_sect_change"]
@@ -969,3 +1005,4 @@ text = "Select"
 [connection signal="pressed" from="popup_addPreset/VBoxContainer/HBoxContainer/btn_addPreset" to="ScrollContainer/btnsVbox/char_grid" method="_on_btn_add_preset_pressed"]
 [connection signal="pressed" from="popup_addPreset/btn_closeAddPreset" to="ScrollContainer/btnsVbox/char_grid" method="_on_btn_close_add_preset_pressed"]
 [connection signal="pressed" from="popup_changeFolderPresets/VBoxContainer/HBoxContainer/btn_SelectFolder" to="ScrollContainer/btnsVbox/char_grid" method="_on_btn_select_folder_pressed"]
+[connection signal="toggled" from="btn_winSize" to="btn_winSize" method="_on_toggled"]

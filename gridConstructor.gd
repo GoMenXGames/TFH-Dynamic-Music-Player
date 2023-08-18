@@ -3,6 +3,12 @@ extends GridContainer
 #const BUS_LAYOUT: String = "res://default_bus_layout.tres"
 
 
+
+var fullNames = ["Velvet", "Tianhuo", "Oleander", "Arizona", "Paprika", "Pom", "Shanty", "Texas", "Stronghoof"]
+func getFullName(shortName):
+	return fullNames[arrChar.split(" ").find(shortName)]
+var sectionFullNames = ["Round 1","Round 2","Final Round"]
+
 var mapBased = ["idle", "static"]
 var arrChar = "velv tian ole ari pap pom shan txs stg"
 var sectionNames = ["s1","s2","kc"]
@@ -40,6 +46,7 @@ var debuffVol = 0
 
 var sliderIsDrag = false
 
+var currTime = int(Time.get_unix_time_from_system())
 
 ###Генерация
 #Static & Idle buttons
@@ -119,6 +126,7 @@ func genCharMixer():
 ###
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	lastUpd = int(Time.get_unix_time_from_system())
 	DirAccess.open("user://")
 	if FileAccess.file_exists("user://settings.ini"):
 		print("kek it works!")
@@ -150,6 +158,8 @@ func getFolder():
 	
 func _notification(what):
 	match what:
+		NOTIFICATION_WM_CLOSE_REQUEST:
+			discord_sdk.clear()
 		NOTIFICATION_APPLICATION_FOCUS_IN:
 			reloadPresetList()
 			pass
@@ -176,6 +186,7 @@ func loadMaps(): # BG change
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	currTime = int(Time.get_unix_time_from_system())
 	%timeNow.text = getTime()
 	if isPlaying:
 		if !sliderIsDrag:
@@ -185,8 +196,10 @@ func _process(delta):
 			time = 0
 			if repeat == 1:
 				restart()
+				updDiscordRP()
 			elif repeat == 2:
 				_on_fast_btn_pressed()
+				updDiscordRP()
 #				restart()
 			else:
 				%playBtn.button_pressed = false
@@ -245,6 +258,7 @@ func resetBtns(name):
 			btn.button_pressed = false 
 
 func checkBtns():
+	
 	map = getMapName()
 	section = getNameSect(%section_option.selected)
 	var btns = get_tree().get_nodes_in_group("g_music_btn")
@@ -499,6 +513,7 @@ func _on_play_btn_toggled(button_pressed):
 	isPlaying = button_pressed
 	if isPlaying:
 		play()
+		updDiscordRP()
 	else:
 		pause()
 	pass # Replace with function body.
@@ -568,6 +583,7 @@ func _on_map_option_item_selected(index):
 	changeLevel(index)
 	checkBtns()
 	switchAudio()
+	updDiscordRP()
 #	%playBtn.button_pressed = false
 	pass # Replace with function body.
 
@@ -575,6 +591,7 @@ func _on_sect_change(index):
 	setTime(0)
 	checkBtns()
 	switchAudio()
+	updDiscordRP()
 #	%playBtn.button_pressed = false
 
 func _on_forward_btn_pressed():
@@ -980,3 +997,40 @@ func _on_btn_change_folder_presets_pressed():
 func _on_btn_close_add_preset_pressed():
 	%popup_addPreset.visible = false
 	pass # Replace with function body.
+
+var lastUpd = 0
+
+func updDiscordRP():
+	if lastUpd + 30 < currTime:
+		lastUpd = int(Time.get_unix_time_from_system())
+	else:
+		print("too time nearly!!!")
+	if isPlaying:
+		discordAPI()
+
+func discordAPI():
+	discord_sdk.clear()
+	# Application ID
+	discord_sdk.app_id = 1142132069162565682
+	# this is boolean if everything worked
+#	print("Discord working: " + str(discord_sdk.get_is_discord_working()))
+	# Set the first custom text row of the activity here
+	discord_sdk.details = "Enjoying good music!"
+#	print(discord_sdk.details)
+	# Set the second custom text row of the activity here
+	discord_sdk.state = getFullName(map) + " | " + sectionFullNames[sectionNames.find(section)]
+#	print(discord_sdk.state)
+	# Image key for small image from "Art Assets" from the Discord Developer website
+	discord_sdk.large_image = "albumlogo"
+	# Tooltip text for the large image
+	discord_sdk.large_image_text = "TFH: Dynamic Music Player"
+	# Image key for large image from "Art Assets" from the Discord Developer website
+	discord_sdk.small_image = map
+##     # Tooltip text for the small image
+	discord_sdk.small_image_text = getFullName(map)
+#	print(discord_sdk.small_image_text)
+##     # "02:41 elapsed" timestamp for the activity
+	discord_sdk.start_timestamp = int(Time.get_unix_time_from_system()) + time
+##     # Always refresh after changing the values!
+	print("Upd!")
+	discord_sdk.refresh()
