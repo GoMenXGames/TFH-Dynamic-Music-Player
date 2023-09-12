@@ -24,11 +24,11 @@ _The work has been started since the beginning of April 2023_
 
 ### BUY GAME IN STEAM: [Them's Fightin' Herds _on Steam_](https://store.steampowered.com/app/574980/Thems_Fightin_Herds/)
 
-## System requirements (Recommend):
+## System requirements:
 - OS: Windows 10+ 64bit
 - CPU: 2-core CPU with 2 GHz
 - RAM: 4GB+
-- GPU: 1GB+ VRAM
+- GPU: 1GB+ VRAM (With OpenGL 3.3)
 - HDD: 3GB+ (SSD for Faster Launch) (Most of the program's volume is occupied by music files)
 
 ## Download:
