@@ -20,7 +20,7 @@ _The work has been started since the beginning of April 2023_
 > - Program Concept
 
 - Engine: [**Godot 4.1**](https://godotengine.org/)
-- All **images** & **music** been getted from _game_ and **own** by [Mane6](https://www.mane6.com/) & [Modus](https://modusgames.com/) ([RainbowCrash88](https://www.youtube.com/RainbowCrash88) & [Whitetail](https://www.youtube.com/@WhitetailMusic))
+- All **images** & **music** been getted from _game_ and **own** by [Mane6](https://www.mane6.com/) & [Modus aka MAXIMUM ENTERTAINMENT](https://modusgames.com/) ([RainbowCrash88](https://www.youtube.com/RainbowCrash88) & [Whitetail](https://www.youtube.com/@WhitetailMusic))
 
 ### BUY GAME IN STEAM: [Them's Fightin' Herds _on Steam_](https://store.steampowered.com/app/574980/Thems_Fightin_Herds/)
 
@@ -37,7 +37,7 @@ _The work has been started since the beginning of April 2023_
 ## Video
 
 > [![WATCH NOW!](http://img.youtube.com/vi/B5D9NRB6o7I/0.jpg)](http://www.youtube.com/watch?v=B5D9NRB6o7I "YouTube video - Click to Watch!")
-### "TFH: Dynamic Music Player \(Kosmen21's video\) - Click to Watch!"
+### ["TFH: Dynamic Music Player \(Kosmen21's video\) - Click to Watch!"](http://www.youtube.com/watch?v=B5D9NRB6o7I "YouTube video - Click to Watch!")
 
 ## Images
 | --- | --- |
