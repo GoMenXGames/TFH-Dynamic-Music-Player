@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://brbsavupp46c0"]
+[gd_scene load_steps=23 format=3 uid="uid://brbsavupp46c0"]
 
 [ext_resource type="Script" path="res://mainmenu.gd" id="1_6h84s"]
 [ext_resource type="Texture2D" uid="uid://c7g327fw1srjn" path="res://src/img/albumLogo.jpg" id="2_diq7p"]
@@ -10,10 +10,21 @@
 [ext_resource type="Texture2D" uid="uid://djbovpfyn8lgk" path="res://src/img/ui/icons/go_hover.png" id="7_28qsi"]
 [ext_resource type="Texture2D" uid="uid://dwtt1n8v8u3rm" path="res://src/img/ui/icons/INFO_hover.png" id="9_6cain"]
 [ext_resource type="Texture2D" uid="uid://csqls7mb8u2tj" path="res://yt.png" id="10_5t74n"]
+[ext_resource type="Texture2D" uid="uid://o40ykr6wwuog" path="res://src/img/ui/icons/arrowBack.png" id="10_ntono"]
 [ext_resource type="Texture2D" uid="uid://c7p53jxukb30" path="res://github_white.png" id="11_7sgq4"]
 [ext_resource type="Texture2D" uid="uid://er7twlvcqxkg" path="res://src/img/ui/icons/maximize.png" id="12_ch0yf"]
 [ext_resource type="Texture2D" uid="uid://bbxwr5otcipyl" path="res://src/img/ui/icons/minimize.png" id="13_4vo5v"]
 [ext_resource type="Script" path="res://btn_winSize.gd" id="14_e2n3u"]
+[ext_resource type="StyleBox" uid="uid://b84ftchphskhk" path="res://BoxTexture.tres" id="16_35u7d"]
+[ext_resource type="Theme" uid="uid://cktiaxhkanqmp" path="res://btns.tres" id="17_ahpgu"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_vqvg5"]
+device = -1
+shift_pressed = true
+keycode = 4194305
+
+[sub_resource type="Shortcut" id="Shortcut_sa3m7"]
+events = [SubResource("InputEventKey_vqvg5")]
 
 [sub_resource type="InputEventKey" id="InputEventKey_xpeuh"]
 device = -1
@@ -29,9 +40,9 @@ events = [SubResource("InputEventKey_xpeuh"), SubResource("InputEventKey_rxiwx")
 
 [node name="mainmenu" type="Control"]
 layout_mode = 3
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -43,8 +54,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -340.0
-offset_right = 340.0
+offset_left = -353.0
+offset_top = -8.0
+offset_right = 354.0
+offset_bottom = 8.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_pt44m")
@@ -57,9 +70,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -202.0
-offset_top = -364.0
+offset_top = -356.0
 offset_right = 202.0
-offset_bottom = 40.0
+offset_bottom = 48.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
@@ -71,7 +84,10 @@ expand_mode = 1
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
+offset_left = -3.0
+offset_top = -2.0
 offset_right = 200.0
+offset_bottom = 5.0
 grow_vertical = 2
 texture = ExtResource("5_e8mww")
 
@@ -82,6 +98,9 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -269.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 5.0
 grow_horizontal = 0
 grow_vertical = 2
 texture = ExtResource("6_02w8h")
@@ -114,15 +133,28 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -134.0
-offset_top = 255.0
+offset_top = 213.0
 offset_right = 135.0
-offset_bottom = 308.0
+offset_bottom = 266.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 texture_normal = ExtResource("4_88bnk")
 texture_hover = ExtResource("9_6cain")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="backBtn" type="TextureButton" parent="."]
+layout_mode = 1
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 64.0
+offset_bottom = 55.0
+tooltip_text = "Back to Main Menu
+Binded on \"Shift\" + \"Esc\""
+shortcut = SubResource("Shortcut_sa3m7")
+texture_normal = ExtResource("10_ntono")
 ignore_texture_size = true
 stretch_mode = 0
 
@@ -157,7 +189,7 @@ expand_mode = 3
 layout_mode = 2
 text = "Kosmen21"
 underline = 1
-uri = "https://www.youtube.com/@Kosmen21"
+uri = "https://youtu.be/B5D9NRB6o7I"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -183,10 +215,16 @@ uri = "https://github.com/GoMenXGames/TFH-Dynamic-Music-Player"
 layout_mode = 2
 size_flags_horizontal = 4
 tooltip_text = "Change log:
-- Added Discord Rich Presence
-- Added fullscreen mode"
+▹ Added support for a low resolution monitors
+▹ Added disclaimer(just in case)
+▹ Added new repeat feature
+▹ Added full Stronghoof, Nidra and Baihe DMS
+▹ Added Stronghoof, Nidra, Baihe, Waterfall, Library and Training map
+▹ Added Story mode and salt mine DMS
+▹ Added Intros, Pre-loops, Transitions, Outros almost for all maps(coming in next update >w<)
+▹ Some small details ;>"
 mouse_filter = 1
-text = "v.1.1 (Discord Rich Presence)"
+text = "v 2.0 (We want to believe)"
 
 [node name="btn_winSize" type="TextureButton" parent="."]
 layout_mode = 1
@@ -209,6 +247,54 @@ ignore_texture_size = true
 stretch_mode = 0
 script = ExtResource("14_e2n3u")
 
+[node name="exitPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -112.0
+offset_top = -48.5
+offset_right = 112.0
+offset_bottom = 48.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("16_35u7d")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="exitPanel"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="exitPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "You wanna quit?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="exitPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Button" type="Button" parent="exitPanel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme = ExtResource("17_ahpgu")
+text = "Yes"
+
+[node name="Button2" type="Button" parent="exitPanel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme = ExtResource("17_ahpgu")
+text = "No"
+
 [connection signal="pressed" from="StartBtn" to="." method="_on_texture_button_pressed"]
 [connection signal="pressed" from="InfoBtn" to="." method="_on_info_btn_pressed"]
+[connection signal="pressed" from="backBtn" to="." method="_on_back_btn_pressed"]
 [connection signal="toggled" from="btn_winSize" to="btn_winSize" method="_on_toggled"]
+[connection signal="pressed" from="exitPanel/VBoxContainer/HBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="exitPanel/VBoxContainer/HBoxContainer/Button2" to="." method="_on_button_2_pressed"]

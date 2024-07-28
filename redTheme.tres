@@ -1,0 +1,47 @@
+[gd_resource type="Theme" load_steps=8 format=3 uid="uid://ckl3uqwxli42a"]
+
+[ext_resource type="Texture2D" uid="uid://cymsgc0ly1hyh" path="res://empty.png" id="1_inxlg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lne15"]
+bg_color = Color(0.0980392, 0.0980392, 0.0980392, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_08s8d"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ggfi4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4guhm"]
+content_margin_left = 18.0
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.671875, 0, 0.265625, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+anti_aliasing = false
+anti_aliasing_size = 9.874
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yd18w"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wngpt"]
+
+[resource]
+PopupMenu/icons/checked = ExtResource("1_inxlg")
+PopupMenu/icons/checked_disabled = ExtResource("1_inxlg")
+PopupMenu/icons/radio_checked = ExtResource("1_inxlg")
+PopupMenu/icons/radio_checked_disabled = ExtResource("1_inxlg")
+PopupMenu/icons/radio_unchecked = ExtResource("1_inxlg")
+PopupMenu/icons/radio_unchecked_disabled = ExtResource("1_inxlg")
+PopupMenu/icons/submenu = ExtResource("1_inxlg")
+PopupMenu/icons/submenu_mirrored = ExtResource("1_inxlg")
+PopupMenu/icons/unchecked = ExtResource("1_inxlg")
+PopupMenu/icons/unchecked_disabled = ExtResource("1_inxlg")
+PopupMenu/styles/hover = SubResource("StyleBoxFlat_lne15")
+PopupMenu/styles/labeled_separator_left = SubResource("StyleBoxEmpty_08s8d")
+PopupMenu/styles/labeled_separator_right = SubResource("StyleBoxEmpty_ggfi4")
+PopupMenu/styles/panel = SubResource("StyleBoxFlat_4guhm")
+PopupMenu/styles/panel_disabled = SubResource("StyleBoxEmpty_yd18w")
+PopupMenu/styles/separator = SubResource("StyleBoxEmpty_wngpt")

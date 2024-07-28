@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=3 uid="uid://riq4laevjead"]
+[gd_scene load_steps=78 format=3 uid="uid://riq4laevjead"]
 
 [ext_resource type="Texture2D" uid="uid://ba2nbhxhnwyq1" path="res://src/img/ui/hud_red.png" id="1_hkxht"]
 [ext_resource type="Texture2D" uid="uid://bijpx3gkq538q" path="res://src/img/maps/other/training.png" id="1_jl6ye"]
@@ -9,8 +9,11 @@
 [ext_resource type="Texture2D" uid="uid://bh6a8eiafhe7f" path="res://src/img/ui/hud_playback.png" id="4_t0102"]
 [ext_resource type="Texture2D" uid="uid://bvqqpndv4h0ww" path="res://src/img/ui/media/pause.png" id="4_yxqtb"]
 [ext_resource type="Texture2D" uid="uid://cymsgc0ly1hyh" path="res://empty.png" id="5_ar5f4"]
+[ext_resource type="Texture2D" uid="uid://dmj0ptkkhad4a" path="res://src/img/ui/icons/star_empty.png" id="5_kww2i"]
 [ext_resource type="Texture2D" uid="uid://dpaxsbttvcij5" path="res://src/img/ui/media/backward.png" id="6_od1gn"]
+[ext_resource type="Texture2D" uid="uid://c4ih7sm2bnafi" path="res://src/img/ui/icons/star_full.png" id="6_x8teq"]
 [ext_resource type="Texture2D" uid="uid://ck1kgdhreitbf" path="res://src/img/ui/icons/lock_green.png" id="7_1ived"]
+[ext_resource type="Theme" uid="uid://ckl3uqwxli42a" path="res://redTheme.tres" id="7_ql1ft"]
 [ext_resource type="Texture2D" uid="uid://b6p5f02xqbc7g" path="res://src/img/ui/media/speedDown.png" id="7_syt74"]
 [ext_resource type="Texture2D" uid="uid://bwq1gks4q5mub" path="res://src/img/ui/icons/lock_white.png" id="8_0rhq1"]
 [ext_resource type="Texture2D" uid="uid://c3kx46si0ib56" path="res://src/img/ui/media/stop.png" id="8_pppan"]
@@ -26,6 +29,8 @@
 [ext_resource type="Texture2D" uid="uid://er7twlvcqxkg" path="res://src/img/ui/icons/maximize.png" id="24_s2l7u"]
 [ext_resource type="Texture2D" uid="uid://bbxwr5otcipyl" path="res://src/img/ui/icons/minimize.png" id="25_vm73d"]
 [ext_resource type="Script" path="res://btn_winSize.gd" id="26_tfqtu"]
+[ext_resource type="Texture2D" uid="uid://k5lqrmwn7mwh" path="res://src/img/icons/mini/ole.png" id="27_bmy0m"]
+[ext_resource type="Script" path="res://orderList.gd" id="28_ulvbu"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_hqxja"]
 device = -1
@@ -44,20 +49,11 @@ PopupMenu/icons/radio_unchecked = null
 PopupMenu/icons/radio_unchecked_disabled = null
 PopupMenu/styles/panel = null
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cyhg8"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_usjlg"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 draw_center = false
-
-[sub_resource type="Theme" id="Theme_30bft"]
-OptionButton/constants/outline_size = 1
-OptionButton/icons/arrow = ExtResource("5_ar5f4")
-OptionButton/styles/focus = SubResource("StyleBoxFlat_usjlg")
-PopupMenu/constants/indent = 0
-PopupMenu/font_sizes/font_separator_size = 16
-PopupMenu/icons/radio_checked = null
-PopupMenu/icons/radio_checked_disabled = null
-PopupMenu/icons/radio_unchecked = null
-PopupMenu/icons/radio_unchecked_disabled = null
 
 [sub_resource type="Theme" id="Theme_c3nfq"]
 CheckBox/icons/checked = ExtResource("7_1ived")
@@ -228,11 +224,28 @@ keycode = 4194309
 [sub_resource type="Shortcut" id="Shortcut_ifpnv"]
 events = [SubResource("InputEventKey_xpeuh"), SubResource("InputEventKey_rxiwx")]
 
+[sub_resource type="Theme" id="Theme_41oxm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p1lfa"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.671875, 0, 0.261719, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="Theme" id="Theme_oyusu"]
+
 [node name="Control" type="Control"]
 layout_mode = 3
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 2.0
+offset_right = 2.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
@@ -259,8 +272,8 @@ anchor_left = 0.003
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 0.2
-offset_top = 130.0
-offset_bottom = -139.0
+offset_top = 125.0
+offset_bottom = -132.0
 grow_horizontal = 2
 grow_vertical = 2
 horizontal_scroll_mode = 3
@@ -269,7 +282,7 @@ vertical_scroll_mode = 3
 [node name="btnsVbox" type="VBoxContainer" parent="ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 6
+size_flags_horizontal = 3
 size_flags_vertical = 6
 
 [node name="map_based" type="HBoxContainer" parent="ScrollContainer/btnsVbox"]
@@ -278,12 +291,18 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 
-[node name="char_grid" type="GridContainer" parent="ScrollContainer/btnsVbox"]
+[node name="char_grid" type="HFlowContainer" parent="ScrollContainer/btnsVbox"]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 4
 size_flags_vertical = 4
-columns = 3
+alignment = 1
 script = ExtResource("3_7s8gg")
+
+[node name="lvl_based" type="HFlowContainer" parent="ScrollContainer/btnsVbox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 10
+alignment = 1
 
 [node name="header_bg" type="TextureRect" parent="."]
 layout_mode = 1
@@ -360,6 +379,18 @@ scroll_active = false
 autowrap_mode = 0
 shortcut_keys_enabled = false
 
+[node name="customRepeatBtn" type="TextureButton" parent="header_bg/header/check_repeat"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 30.0
+offset_right = 48.0
+offset_bottom = 31.0
+tooltip_text = "Show custom repeat in order"
+toggle_mode = true
+texture_normal = ExtResource("5_kww2i")
+texture_pressed = ExtResource("6_x8teq")
+
 [node name="VBoxContainer" type="VBoxContainer" parent="header_bg/header"]
 layout_mode = 2
 size_flags_horizontal = 6
@@ -367,6 +398,7 @@ size_flags_vertical = 4
 
 [node name="map_option" type="OptionButton" parent="header_bg/header/VBoxContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 2
@@ -378,6 +410,13 @@ alignment = 1
 clip_text = true
 script = ExtResource("2_iwrv4")
 
+[node name="MenuButton" type="MenuButton" parent="header_bg/header/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("7_ql1ft")
+icon = ExtResource("27_bmy0m")
+
 [node name="section_option" type="OptionButton" parent="header_bg/header/VBoxContainer"]
 unique_name_in_owner = true
 z_as_relative = false
@@ -385,18 +424,22 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 tooltip_text = "Change round"
-theme = SubResource("Theme_30bft")
-theme_override_constants/outline_size = 2
+theme = ExtResource("7_ql1ft")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_cyhg8")
 flat = true
 alignment = 1
-item_count = 3
+item_count = 5
 selected = 0
-popup/item_0/text = "Round 1"
+popup/item_0/text = "Intro"
 popup/item_0/id = 0
-popup/item_1/text = "Round 2"
+popup/item_1/text = "Pre-loop 1"
 popup/item_1/id = 1
-popup/item_2/text = "Final round"
+popup/item_2/text = "Round 1"
 popup/item_2/id = 2
+popup/item_3/text = "Round 2"
+popup/item_3/id = 3
+popup/item_4/text = "Final Round"
+popup/item_4/id = 5
 
 [node name="check_solo" type="TextureButton" parent="header_bg/header"]
 unique_name_in_owner = true
@@ -667,9 +710,9 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 1000.0
+offset_left = 1001.0
 offset_top = -70.0
-offset_right = -0.000244141
+offset_right = -9.00012
 offset_bottom = 70.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -980,9 +1023,104 @@ ignore_texture_size = true
 stretch_mode = 0
 script = ExtResource("26_tfqtu")
 
+[node name="MenuButton" type="MenuButton" parent="."]
+visible = false
+layout_mode = 0
+offset_left = -122.0
+offset_top = 54.0
+offset_right = -49.0
+offset_bottom = 85.0
+theme = SubResource("Theme_41oxm")
+text = "test"
+item_count = 3
+popup/item_0/text = "123"
+popup/item_0/id = 0
+popup/item_1/text = "321"
+popup/item_1/id = 1
+popup/item_2/text = "2223"
+popup/item_2/id = 2
+
+[node name="orderListPanel" type="Panel" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -108.5
+offset_top = 122.0
+offset_right = 108.5
+offset_bottom = 199.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_p1lfa")
+
+[node name="orderList" type="HBoxContainer" parent="orderListPanel"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_oyusu")
+script = ExtResource("28_ulvbu")
+
+[node name="item1" type="VBoxContainer" parent="orderListPanel/orderList"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="orderListPanel/orderList/item1"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "pre1"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="orderListPanel/orderList/item1"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Button" type="Button" parent="orderListPanel/orderList/item1/HBoxContainer"]
+layout_mode = 2
+text = "<"
+
+[node name="Button2" type="Button" parent="orderListPanel/orderList/item1/HBoxContainer"]
+layout_mode = 2
+text = ">"
+
+[node name="item2" type="VBoxContainer" parent="orderListPanel/orderList"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="orderListPanel/orderList/item2"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "pre1"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="orderListPanel/orderList/item2"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="orderListPanel/orderList/item2/HBoxContainer"]
+layout_mode = 2
+text = "<"
+
+[node name="Button2" type="Button" parent="orderListPanel/orderList/item2/HBoxContainer"]
+layout_mode = 2
+text = ">"
+
+[node name="PopupMenu" type="PopupMenu" parent="orderListPanel/orderList/item2/HBoxContainer/Button2"]
+
 [connection signal="pressed" from="header_bg/header/check_repeat" to="ScrollContainer/btnsVbox/char_grid" method="_on_check_repeat_toggled"]
+[connection signal="toggled" from="header_bg/header/check_repeat/customRepeatBtn" to="ScrollContainer/btnsVbox/char_grid" method="_on_button_toggled"]
 [connection signal="item_selected" from="header_bg/header/VBoxContainer/map_option" to="ScrollContainer/btnsVbox/char_grid" method="_on_map_option_item_selected"]
 [connection signal="item_selected" from="header_bg/header/VBoxContainer/section_option" to="ScrollContainer/btnsVbox/char_grid" method="_on_sect_change"]
+[connection signal="ready" from="header_bg/header/VBoxContainer/section_option" to="ScrollContainer/btnsVbox/char_grid" method="_on_section_option_ready"]
 [connection signal="pressed" from="header_bg/header/check_solo" to="ScrollContainer/btnsVbox/char_grid" method="_on_check_solo_pressed"]
 [connection signal="drag_ended" from="footer_bg/slider_timeline" to="ScrollContainer/btnsVbox/char_grid" method="_on_slider_timeline_value_changed"]
 [connection signal="drag_started" from="footer_bg/slider_timeline" to="ScrollContainer/btnsVbox/char_grid" method="_on_slider_timeline_drag_started"]
@@ -1006,3 +1144,4 @@ script = ExtResource("26_tfqtu")
 [connection signal="pressed" from="popup_addPreset/btn_closeAddPreset" to="ScrollContainer/btnsVbox/char_grid" method="_on_btn_close_add_preset_pressed"]
 [connection signal="pressed" from="popup_changeFolderPresets/VBoxContainer/HBoxContainer/btn_SelectFolder" to="ScrollContainer/btnsVbox/char_grid" method="_on_btn_select_folder_pressed"]
 [connection signal="toggled" from="btn_winSize" to="btn_winSize" method="_on_toggled"]
+[connection signal="visibility_changed" from="orderListPanel" to="ScrollContainer/btnsVbox/char_grid" method="_on_order_list_panel_visibility_changed"]

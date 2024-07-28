@@ -1,0 +1,182 @@
+[gd_scene load_steps=12 format=3 uid="uid://bdc45s6t1hnny"]
+
+[ext_resource type="Script" path="res://eula.gd" id="1_2ov01"]
+[ext_resource type="Texture2D" uid="uid://cxuv1jofancqp" path="res://src/img/ui/icons/warn.png" id="2_lxe4g"]
+[ext_resource type="Texture2D" uid="uid://dhbkdfrhxn2ne" path="res://src/img/ui/icons/Overlay.png" id="2_ncfks"]
+[ext_resource type="Texture2D" uid="uid://df64g661742rb" path="res://src/img/ui/icons/check_off.png" id="3_5s7en"]
+[ext_resource type="Texture2D" uid="uid://b780uxf56mfn" path="res://src/img/ui/icons/check_on.png" id="3_ao8x0"]
+[ext_resource type="Texture2D" uid="uid://betinmmbh5fvx" path="res://src/img/ui/icons/deny.png" id="3_jou5w"]
+[ext_resource type="Texture2D" uid="uid://drmmg1lii13pt" path="res://src/img/ui/icons/approved.png" id="4_0h2jn"]
+[ext_resource type="Texture2D" uid="uid://c73dsfo00y67y" path="res://src/img/ui/icons/check_disable.png" id="5_1kh4k"]
+[ext_resource type="Theme" uid="uid://cktiaxhkanqmp" path="res://btns.tres" id="7_kfwl0"]
+[ext_resource type="Texture2D" uid="uid://4sqvmltwqdq2" path="res://src/img/ui/icons/off.png" id="8_t3388"]
+[ext_resource type="Texture2D" uid="uid://fyxsxtn6shib" path="res://src/img/ui/icons/on.png" id="9_3n3gi"]
+
+[node name="eula" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_2ov01")
+
+[node name="Overlay" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1, 1.12361)
+texture = ExtResource("2_ncfks")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="TextureButton" type="TextureButton" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 0
+texture_normal = ExtResource("2_lxe4g")
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 30
+text = "DISCLAIMER"
+
+[node name="TextureButton2" type="TextureButton" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 0
+texture_normal = ExtResource("2_lxe4g")
+
+[node name="TextDisclaimer" type="TextEdit" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/background_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "1. This program does not steal these soundtracks, and they do not relate in any way and do not belong to the developers of this program, because everything was purchased on the Steam and used from the licensed digital version of the game, which belongs to Mane6, published by Modus aka Maximum Entertainment, in addition to the licensed official soundtrack, which belong to RainbowCrash88 aka Stuart Ferguson & Whitetail.
+2. This program does not use these soundtracks for its own benefit. The developers of this program are only trying to show people the concept of good dynamic music, and in no case are they trying to make money on it, all so that you can enjoy the work of RainbowCrash88 aka Stuart Ferguson & Whitetail, and most importantly show other games what they need to strive for.
+3. This program tries to show this hard work on the soundtrack, so that it will be noticed by many people, because this work deserves more attention, and can compete with many composers. But due to the fact that the game is not very popular and is at the stage of “fading out”, it becomes very sad for that hard work that they done.
+4. The developers of this program will not receive a legal action because this program does not illegally distribute music from Them’s Fightin’ Herds, we will only be glad if you officially buy their soundtrack, we have made a websites button in “INFO” where you can purchase them.
+5. The developers of this program love Them's Fightin’ Herds and most importantly appreciate the hard work done on it. The developers of this program are the most ordinary players and part of the Them's Fightin’ Herds community, who are trying to prolong the life of this game in any possible way!
+"
+editable = false
+wrap_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="CheckBoxAgree" type="TextureButton" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+disabled = true
+toggle_mode = true
+texture_normal = ExtResource("3_5s7en")
+texture_pressed = ExtResource("3_ao8x0")
+texture_disabled = ExtResource("5_1kh4k")
+
+[node name="CheckBoxAgreeLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Agree all above"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="CheckBoxReShow" type="TextureButton" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+disabled = true
+toggle_mode = true
+texture_normal = ExtResource("3_5s7en")
+texture_pressed = ExtResource("3_ao8x0")
+texture_disabled = ExtResource("5_1kh4k")
+
+[node name="CheckBoxReShowLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "dontshowagain"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="ButtonDeny" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("7_kfwl0")
+text = "Refuse"
+icon = ExtResource("3_jou5w")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "ENG"
+
+[node name="LangSwitch" type="TextureButton" parent="MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+toggle_mode = true
+texture_normal = ExtResource("8_t3388")
+texture_pressed = ExtResource("9_3n3gi")
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "RUS"
+
+[node name="ButtonApprove" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("7_kfwl0")
+disabled = true
+text = "Accept"
+icon = ExtResource("4_0h2jn")
+
+[node name="COPYRIGHT" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "THEM’S FIGHTIN’ HERDS ® & © 2022 Modus Games, LLC. All rights reserved."
+
+[connection signal="size_flags_changed" from="." to="." method="_on_size_flags_changed"]
+[connection signal="caret_changed" from="MarginContainer/VBoxContainer/TextDisclaimer" to="." method="_on_caret_changed"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/CheckBoxAgree" to="." method="_on_check_box_agree_toggled"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/ButtonDeny" to="." method="_on_button_deny_pressed"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/LangSwitch" to="." method="_on_lang_switch_toggled"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/ButtonApprove" to="." method="_on_button_approve_pressed"]

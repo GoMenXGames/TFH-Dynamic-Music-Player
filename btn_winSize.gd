@@ -15,4 +15,5 @@ func _process(delta):
 
 func _on_toggled(button_pressed):
 	get_window().mode = modes[int(button_pressed)] 
+	
 	pass # Replace with function body.

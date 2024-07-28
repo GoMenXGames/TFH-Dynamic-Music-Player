@@ -1,20 +1,25 @@
-extends GridContainer
+extends FlowContainer
 #
 #const BUS_LAYOUT: String = "res://default_bus_layout.tres"
 
 
 
-var fullNames = ["Velvet", "Tianhuo", "Oleander", "Arizona", "Paprika", "Pom", "Shanty", "Texas", "Stronghoof"]
+var fullNames = ["Velvet", "Tianhuo", "Oleander", "Arizona", "Paprika", "Pom", "Shanty", "Texas", "Stronghoof", "Nidra", "Baihe"]
 func getFullName(shortName):
 	return fullNames[arrChar.split(" ").find(shortName)]
-var sectionFullNames = ["Round 1","Round 2","Final Round"]
+var sectionFullNames =  ["Intro", "Pre-loop 1", "Transition 1", "Round 1", "Transition 2", "Transition", "Round 2", "Outro", "Transition Final", "Pre-loop Final", "Final Round", "Outro Final"]
+var sectionFullNamesTraining = ["Pre-loop","Loop"]
+var sectionFullNamesOther = ["Level based"]
+
 
 var mapBased = ["idle", "static"]
-var arrChar = "velv tian ole ari pap pom shan txs stg"
-var sectionNames = ["s1","s2","kc"]
-var arrMaps = "ari ole pap pom tian txs velv shan"
+var arrChar = "velv tian ole ari pap pom shan txs stg ndr bh"
+var sectionFull =  ["i", "pls", "str1", "s1", "str2", "str", "s2", "o", "strkc", "plkc", "kc", "okc"]
+var sectionNames = ["i", "pls", "s1", "s2", "kc"]
+var arrMaps = "ari ole pap pom tian txs velv shan stg ndr bh hwf training lib"
+var repeatCustomList =  ["i", "pls", "str1", "s1", "str2", "str", "s2", "o", "strkc", "plkc", "kc", "okc"]
 
-var repeatArr = ["playOnce", "repeat", "repeatOne"]
+var repeatArr = ["playOnce", "repeat", "repeatOne", "repeatCustom"]
 var repeatArrText = [
 	"The repeat of music is disabled, 
 	when the song ends, 
@@ -22,14 +27,43 @@ var repeatArrText = [
 	"Music will be repeated
 	on the same round",
 	"Music will be cyclically repeated
-	in the order of rounds"
+	in the order of rounds",
+	"Custom repeat mode"
 ]
+
+var struct = {
+	'text': "title",
+	'submenus': [
+		{
+			'title': 'Full-DMS',
+			'submenus': [],
+			'items': ["ari", "ole", "pap", "pom", "tian", "txs", "velv", "shan"]
+		},
+		{
+			'title': 'Semi-DMS',
+			'submenus': [],
+			'items': ["stg", "ndr", "bh", "hwf", "lib", "training"]
+		},
+		{
+			'title': 'Other',
+			'submenus': [],
+			'items': ["canyon", "cave", "temple", "salt", "bear"]
+		},
+#		{
+#			'title': 'BONUS',
+#			'submenus': [],
+#			'items': ["CHAR SELECT"]
+#		}
+	]
+}
 
 var audioFiles = []
 
 var last_btn = "none"
+var lastPressedLvlBased = []
 var map = "none"
 var section = "none"
+var category = "Full-DMS"
 
 var username = OS.get_user_data_dir().split("/")[2]
 var path_presetsFiles = "C:\\Users\\"+username+"\\Documents\\TFH Dynamic Music Player"
@@ -62,22 +96,35 @@ func genMapBasedBtn():
 		#Визуал
 		newBtn.texture_pressed = load("res://src/img/icons/"+btn+".png");
 		newBtn.texture_normal = load("res://src/img/icons/"+btn+"_gray.png");
-		newBtn.tooltip_text = btn
+		newBtn.tooltip_text = btn[0].to_upper() + btn.substr(1, -1)
 		
 		newBtn.texture_disabled = load("res://src/img/icons/"+btn+"_lock.png");
 		newBtn.add_to_group("g_music_btn")
 		%map_based.add_child(newBtn)
 
+func resizeAutoWithParent(obj): # меняет минимальную ширену обьекта под родительскую
+	#print(obj.get_parent_area_size())
+	obj.custom_minimum_size = Vector2(obj.get_parent_area_size().x-10,0)
+	pass
+
 #All char's buttons
 func genCharBtn():
 	var chars = arrChar.split(" ")
 	for char in chars:
+		if char == "shan": #Если начились ДЛС персы 
+			var split = Label.new() #Создать новый текст элемент
+			split.clip_text = true
+			#split.text = "DLC (Season pass #1)"
+			split.label_settings = load("res://LabelSettingsTFH.tres")
+			split.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			self.add_child(split)
+			self.resized.connect(resizeAutoWithParent.bind(split)) #Вызывать при изменении размера
 		var newBtn = TextureButton.new()
 		#Технический
 		newBtn.toggle_mode = true
 		newBtn.disabled = true
 		newBtn.name = "btn_" + char
-		newBtn.tooltip_text = char
+		newBtn.tooltip_text = getFullName(char)
 		newBtn.pressed.connect(btn_pressed.bind(char))
 		#Визуал
 		newBtn.texture_pressed = load("res://src/img/icons/"+char+".png");
@@ -123,9 +170,43 @@ func genCharMixer():
 
 
 
+func genMenu():
+	%MenuButton.icon = load("res://src/img/icons/mini/" + "ari" + ".png")
+	var popup = %MenuButton.get_popup()
+	popup.transparent_bg = true
+#	if struct.submenus.size() == 0:
+#		pass
+	for submenu in struct.submenus:
+		var temp = PopupMenu.new()
+		temp.transparent_bg = true
+		temp.set_name(submenu.title)
+		var index = 0
+		temp.index_pressed.connect(newChangeMap.bind(submenu.title))
+		print_debug(DirAccess.get_files_at("res://src/img/icons/mini/"))
+		for item in submenu.items:
+				
+			var img = null;
+			if (FileAccess.file_exists("res://src/img/icons/mini/" + item + ".png.import")):
+				img = load("res://src/img/icons/mini/" + item + ".png");
+			var title = ""
+			if img == null:
+				title = item
+			temp.add_icon_item(img, title)
+			index += 1
+		popup.add_child(temp)
+		popup.add_submenu_item(submenu.title, submenu.title)
+		print(submenu.title)
+
+func _print(id, submenu, item):
+	print(id," ", submenu," ", item)
 ###
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	if get_window().mode == Window.MODE_WINDOWED:
+		get_window().position = Vector2(
+			DisplayServer.screen_get_size(-1).x/2-get_window().size.x/2,
+			DisplayServer.screen_get_size(-1).y/2-get_window().size.y/2
+			)
 	lastUpd = int(Time.get_unix_time_from_system())
 	DirAccess.open("user://")
 	if FileAccess.file_exists("user://settings.ini"):
@@ -140,9 +221,11 @@ func _ready():
 	genMapBasedBtn() # Static and Idle
 	genCharBtn() # create chars
 	genCharMixer() # create chars
+	genMenu() # create DropMap
 	loadMaps() #bg change
 	getNameSect(%section_option.selected)
 	checkBtns()
+	genOrderList()
 	if DirAccess.dir_exists_absolute(path_presetsFiles):
 		print("folder exits")
 #		presets = load_presets()
@@ -186,6 +269,7 @@ func loadMaps(): # BG change
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+#	print(get_window().size)
 	currTime = int(Time.get_unix_time_from_system())
 	%timeNow.text = getTime()
 	if isPlaying:
@@ -201,6 +285,9 @@ func _process(delta):
 				_on_fast_btn_pressed()
 				updDiscordRP()
 #				restart()
+			elif repeat == 3:
+				nextCustom(+1)
+				updDiscordRP()
 			else:
 				%playBtn.button_pressed = false
 				
@@ -208,7 +295,75 @@ func _process(delta):
 	
 	pass
 
+func nextCustom(_shift):
+	var _count = 0
+	for _elem in repeatCustomList:
+		_count += int(_elem.state)
+	if _count == 0:
+		return 0
+	#repeatCustomList
+	var _current = sectionNames[%section_option.selected] # s1
+	var _next = null
+	var _curIndex = null
+	var _index = 0
+	for _elem in repeatCustomList:
+		if _index > repeatCustomList.size()-1:
+			_index = 0
+		if _index < 0:
+			_index = repeatCustomList.size()-1
+		if _elem.name == _current:
+			_curIndex = _index
+			break
+		else: 
+			_index += 1
+		
+	_curIndex += _shift
+	
+	if _curIndex > repeatCustomList.size()-1:
+		_curIndex = 0
+	if _curIndex < 0:
+		_curIndex = repeatCustomList.size()-1
+	_next = repeatCustomList[_curIndex]
+	
+	while !repeatCustomList[_curIndex].state:
+		_curIndex += _shift
+		if _curIndex > repeatCustomList.size()-1:
+			_curIndex = 0
+		if _curIndex < 0:
+			_curIndex = repeatCustomList.size()-1
+	_next = repeatCustomList[_curIndex]
+	print(_index)
+	%section_option.select(sectionNames.find(_next.name))
+	_on_sect_change(%section_option.selected)
+	
+
+func isEnabled(_name):
+	for _elem in repeatCustomList:
+		if _elem.name == _name:
+			return _elem.state
+	return false
+	
 ###Tech
+
+func newChangeLevel(_map):
+#	var mapIcon = %map_option.get_item_icon(id)
+#	var iconPath = mapIcon.resource_path.split("/")
+#	var size = iconPath.size()
+#	var iconName = iconPath[size-1].split(".")[0]
+#	#print_debug(iconName)
+	
+	#print(DirAccess.get_files_at("res://src/img/maps/" + iconName))
+	var allowedMaps = []
+	if (DirAccess.dir_exists_absolute("res://src/img/maps/" + _map)):
+		allowedMaps = DirAccess.get_files_at("res://src/img/maps/" + _map)
+	if allowedMaps.size() == 0:
+		_map = "training"
+		allowedMaps = DirAccess.get_files_at("res://src/img/maps/" + "training")
+	var rngName = ".import"
+#	while rngName.contains("import"):
+	rngName = allowedMaps[randi_range(0,allowedMaps.size()-1)]
+	#print(rngName)
+	%bg.texture = load("res://src/img/maps/"+ _map + "/"+ rngName.split(".import")[0])
 
 func changeLevel(id):
 	var mapIcon = %map_option.get_item_icon(id)
@@ -233,37 +388,179 @@ func getTime():
 	return strTime
 
 func getNameSect(id): #Получить имя перса по имини
-	return sectionNames[id]
+	if (map == "canyon"):
+		var _test = %section_option.get_item_text(id)
+		return sectionNames[sectionFullNamesTraining.find(_test)]
+	elif (category == "Other"):
+		var _test = %section_option.get_item_text(id)
+		return sectionNames[sectionFullNamesTraining.find(_test)]
+	else:
+		return sectionFull[sectionFullNames.find(%section_option.get_item_text(id))]
 
-func getMapName(): #Получить имя карты
+func oldGetMapName(): #Получить имя карты
 	var mapIcon = %map_option.get_item_icon(%map_option.get_selected_id())
 	var iconPath = mapIcon.resource_path.split("/")
 	var size = iconPath.size()
 	var mapName = iconPath[size-1].split(".")[0]
 	return mapName
 
-func getBtn(name): #Получить кнопку по имени
+func getMapName(): #Получить имя карты
+	var mapIcon = %MenuButton.icon
+	var mapName = ""
+	if mapIcon == null:
+		mapName = %MenuButton.text
+	else:
+		var iconPath = mapIcon.resource_path.split("/")
+		var size = iconPath.size()
+		mapName = iconPath[size-1].split(".")[0]
+	return mapName
+
+func getBtn(_name): #Получить кнопку по имени
 	var btns = get_tree().get_nodes_in_group("g_music_btn")
 	for btn in btns:
-		if btn.name.split("_")[1] == name:
+		if btn.name.split("_")[1] == _name:
 			return btn
 
-func resetBtns(name):
+func genOrderList():
+	for child in %orderList.get_child_count():
+		%orderList.get_child(0, false).free()
+	print_debug(sectionNames)
+	var wnd = get_window().size
+	if get_window().content_scale_mode != Window.CONTENT_SCALE_MODE_DISABLED:
+		wnd = get_window().content_scale_size 
+	%orderListPanel.size = Vector2(sectionNames.size()*100, 80)
+	var ordLP = %orderListPanel.size
+	%orderListPanel.position = Vector2(wnd.x/2-ordLP.x/2, 122)
+	repeatCustomList = [] # Массив для цикла 
+	var i = 0
+	for item in sectionNames:
+		var listElem = {
+			'name': item,
+			'state': true
+		} 
+		repeatCustomList.append(listElem)
+	rebuildOrderList()
+
+func rebuildOrderList():
+	var i = 0
+	
+	for item in %orderList.get_children():
+		item.name += "old"
+		item.queue_free()
+	
+	for item in repeatCustomList:
+		var node = VBoxContainer.new() #
+		node.name = item.name
+		node.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var label = Label.new()
+		if category == "Full-DMS":
+			label.text = sectionFullNames[sectionFull.find(item.name)]
+		elif map == "training" or map == "canyon":
+			print_debug(sectionFullNamesTraining[i])
+			label.text = sectionFullNamesTraining[i]
+		elif category == "Other":
+			label.text = "Level based"
+		else:
+			label.text = item.name
+		node.add_child(label)
+		label.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		var buttons = HBoxContainer.new()
+		buttons.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		var btnBack = Button.new()
+		btnBack.text = "<"
+		btnBack.pressed.connect(btnCustomRepeatPos.bind(-1, item.name))
+		buttons.add_child(btnBack)
+		var btnSwitch = TextureButton.new()
+		btnSwitch.toggle_mode = true
+		btnSwitch.button_pressed = item.state
+		btnSwitch.toggled.connect(switchCustomList.bind(item.name))
+		btnSwitch.texture_normal = load("res://src/img/ui/icons/check_off.png")
+		btnSwitch.texture_pressed = load("res://src/img/ui/icons/check_on.png")
+		btnSwitch.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		buttons.add_child(btnSwitch)
+		var btnForw = Button.new()
+		btnForw.text = ">"
+		btnForw.pressed.connect(btnCustomRepeatPos.bind(+1, item.name))
+		buttons.add_child(btnForw)
+		node.add_child(buttons)
+		%orderList.add_child(node)
+		
+		i += 1
+		label = null
+		buttons = null
+
+func btnCustomRepeatPos(_shift, _elem):
+	var _currentPos = getChildElem(%orderList, _elem).get_index()
+	var orderList = %orderList.get_children()
+	var _index = 0
+	var oldList = repeatCustomList.duplicate()
+	for _item in oldList:
+		if _item.name == _elem:
+			repeatCustomList.pop_at(_index)
+			if _currentPos+_shift < 0:
+				repeatCustomList.insert(repeatCustomList.size(), oldList[_index])
+			elif _currentPos+_shift > repeatCustomList.size():
+				repeatCustomList.insert(0, oldList[_index])
+			else:
+				repeatCustomList.insert(_currentPos+_shift, oldList[_index])
+		_index += 1
+	rebuildOrderList()
+#	var temp = []
+#	for i in orderList.duplicate():
+#		temp.append(i)
+#		i.free()
+#	for item in repeatCustomList:
+#		for oldItem in temp:
+#			if item.name == oldItem.name:
+#				%orderList.add_child(oldItem)
+	print_debug(repeatCustomList ,_shift, _elem)
+	
+
+
+
+
+func genLvlBasedBtn(_count, lvlbasedold):
+	print(_count)
+	while (0 < %lvl_based.get_child_count()):
+		%lvl_based.get_child(0).free()
+	for i in range(_count):
+		var newBtn = TextureButton.new()
+		var _name = "lvl" + str(i+1)
+		newBtn.toggle_mode = true
+		newBtn.disabled = false
+		newBtn.name = "btn_" + _name
+		newBtn.tooltip_text = _name 
+		newBtn.pressed.connect(btn_pressed.bind(_name))
+		#Визуал
+		var addName = ""
+		if section != "lvlbased":
+			print("good news!")
+			addName = section
+		newBtn.texture_normal = load("res://src/img/icons/lvl/num"+str(i+1)+"_gray.png")
+		newBtn.texture_pressed = load("res://src/img/icons/lvl/num"+str(i+1)+".png")
+		#newBtn.texture_disabled = load("res://src/img/icons/"_name+"_lock.png");
+		newBtn.add_to_group("g_music_btn")
+		if lvlbasedold != []:
+			newBtn.button_pressed = lvlbasedold[i-1]
+		%lvl_based.add_child(newBtn)
+
+func resetBtns(_name):
 	map = getMapName()
 	section = getNameSect(%section_option.selected)
 	var btns = get_tree().get_nodes_in_group("g_music_btn")
 	for btn in btns:
 		var btnName = btn.name.split("_")[1]
-		if  not btn.name.split("_")[1] == name:
+		if  not btn.name.split("_")[1] == _name:
 			btn.button_pressed = false 
 
 func checkBtns():
-	
 	map = getMapName()
 	section = getNameSect(%section_option.selected)
 	var btns = get_tree().get_nodes_in_group("g_music_btn")
 	for btn in btns:
 		var btnName = btn.name.split("_")[1]
+		if map == "canyon":
+			btnName = "num"+ btnName.split("lvl")[0]
 		var path = "res://src/music/"+map+"/"+section+"/"+map+"_"+btnName+"_"+section+".wav.import"
 		if FileAccess.file_exists(path):
 			btn.texture_pressed = load("res://src/img/icons/"+btnName+".png");
@@ -276,14 +573,20 @@ func checkBtns():
 			btn.texture_pressed = load("res://src/img/icons/"+btnName+"_bronze.png");
 			btn.texture_normal = load("res://src/img/icons/"+btnName+"_bronze_gray.png");
 			btn.disabled = false
-		else: 
+		elif section == "lvlBased":
+			btn.disabled = false
+		elif map == "canyon":
+			btn.disabled = false
+		else:
 			btn.disabled = true
 
-func btn_pressed (name): #При нажатии кнопки персонажа
+func btn_pressed (_name): #При нажатии кнопки персонажа
+	print(_name)
 	map = getMapName()
 	section = getNameSect(%section_option.selected)
-	#print(map, " ", name, " ", section)
-	var state = getBtn(name)
+	
+	#print(map, " ", _name, " ", section)
+	var state = getBtn(_name)
 	#print(state.button_pressed)
 	if state.button_pressed:
 		if solo == 1:
@@ -297,30 +600,35 @@ func btn_pressed (name): #При нажатии кнопки персонажа
 			for song in soloPlaylist:
 				_playlist.append(song)
 			#print (soloPlaylist, " + ", name)
-			_playlist.append(name)
+			_playlist.append(_name)
 			#print (soloPlaylist, " + ", name)
 			loadPlaylist(_playlist)
 		elif solo == 2:
 			#print("solo")
 #			%playBtn.button_pressed = true
-			resetBtns(name)
+			resetBtns(_name)
 			clearAudio()
-			createAudio(name)
+			createAudio(_name)
 		else:
 			#print("create")
-			createAudio(name)
+			createAudio(_name)
 	else:
 		if solo == 1:
 			var newSoloPlaylist = []
 			for song in soloPlaylist:
-				if song != name:
+				if song != _name:
 					newSoloPlaylist.append(song)
 			soloPlaylist = newSoloPlaylist
 				
 		#print("destroy")
 		last_btn = "none"
-		removeAudio(name)
+		removeAudio(_name)
+	showOnlyOnVol()
 	volumeChanged(getCharVol("all").value, "all")
+
+func showOnlyOnVol():
+	var mixer = %VolumeMixer.get_children()
+	var chars = arrEnabledChars()
 
 ### Sound func's
 
@@ -369,13 +677,17 @@ func createAudio(char): # [v] Создать звуковой файл
 	else:
 		addBronze = ""
 	newAudio.name = "audioPlayer_" + map + "_" + char + "_" + section + addBronze
-	var path = "res://src/music/"+map+"/"+section+"/"+map+"_"+char+"_"+section+addBronze+".wav"
+	var path
+	if section == "lvlBased":
+		path = "res://src/music/"+map+"/"+map+"_"+char+addBronze+".wav"
+	else:
+		path = "res://src/music/"+map+"/"+section+"/"+map+"_"+char+"_"+section+addBronze+".wav"
 	newAudio.stream = load(path)
 	##print_debug(newAudio.stream)
 	if !newAudio.stream: #Проверка на существование файла
 		var dialog = %AcceptDialog
 		dialog.dialog_text = path + " \n Is not exist!"
-#		dialog.show()
+##		dialog.show()
 		getBtn(char).button_pressed = false
 	else:
 		last_btn = char
@@ -457,6 +769,8 @@ func getCharVol(char):
 		if slider.name.split("_")[1] == char:
 			#print(slider.name)
 			return slider
+	var slider = Range.new()
+	return slider
 
 func resetCharVol(char):
 	volumeChanged(0, char)
@@ -531,6 +845,15 @@ func _on_check_repeat_toggled():
 	#print(repeatArr[repeat])
 	%check_repeat.texture_normal = load("res://src/img/ui/icons/"+repeatArr[repeat]+".png")
 	%check_repeat.tooltip_text = repeatArrText[repeat]
+	
+	if repeat == 3:
+		%customRepeatBtn.visible = true
+	else: 
+		%customRepeatBtn.visible = false
+		%customRepeatBtn.button_pressed = false
+		%orderListPanel.visible = false
+		
+	
 	pass # Replace with function body.
 
 var soloArr = ["lock_white", "lock_green", "lock_red"]
@@ -577,9 +900,107 @@ func _on_mute_btn_toggled(button_pressed):
 		%volumeMixContainer.hide()
 	pass # Replace with function body.
 
+func newChangeMap(id, _category):
+	lastPressedLvlBased = getPressedLvlBased()
+	var _map = ""
+	category = _category
+	_print(id, _category, 0)
+	for submenu in struct.submenus:
+		if submenu.title == _category:
+			_map = submenu.items[id]
+	### pog
+	if (_map == "training" or _map == "canyon"):
+		sectionNames = ["pl","loop"]
+		section = "pl"
+		%section_option.clear()
+		%section_option.add_item("Pre-loop")
+		%section_option.add_item("Loop")
+	elif (_category == "Other"):
+		sectionNames = ["lvlBased"]
+		section = "lvlBased"
+		%section_option.clear()
+		%section_option.add_item("Level based")
+	else:
+		%section_option.clear()
+		sectionNames = []
+		for name in sectionFullNames:
+			var _section = sectionFull[sectionFullNames.find(name)]
+			var path = "res://src/music/"+_map
+			print(path, " <- contain folder: ", name)
+			if folderExist(path, _section):
+				sectionNames.append(_section)
+				print(folderExist(path, _section))
+				%section_option.add_item(name)
+				
+	%MenuButton.text = ""
+	var icon = null;
+	if (FileAccess.file_exists("res://src/img/icons/mini/" + _map + ".png")):
+		icon = load("res://src/img/icons/mini/" + _map + ".png")
+	%MenuButton.icon = icon
+	if %MenuButton.icon == null:
+		%MenuButton.text = _map
+	setTime(0)
+	if (_category != "Full-DMS"):
+		%map_based.visible = true
+		%char_grid.visible = false
+	else:
+		%char_grid.visible = true
+	if (_category != "Other"):
+		%lvl_based.visible = false
+		%map_based.visible = true
+	else:
+		_on_stop_btn_pressed()
+		var countLvl = 0
+		if _map == "canyon":
+			sectionNames = ["pl","loop"]
+			countLvl = DirAccess.get_files_at("res://src/music/" + _map + "/"+ section)
+		else:
+			countLvl = DirAccess.get_files_at("res://src/music/" + _map)
+		print(countLvl.size())
+		print_debug(countLvl)
+		var _count = 0
+		for lvl in countLvl:
+			if lvl.ends_with(".import"):
+				_count += 1
+		genLvlBasedBtn(_count, lastPressedLvlBased)
+		%map_based.visible = false
+		%lvl_based.visible = true
+	if map != "canyon":
+		rebuildOrderList()
+	newChangeLevel(_map)
+	checkBtns()
+	switchAudio()
+	updDiscordRP()
+	genOrderList()
+	pass
+
+func folderExist(_path, folderName):
+	print("foldex: " + _path+"/"+folderName)
+	return DirAccess.dir_exists_absolute(_path+"/"+folderName)
+	
+
+
+func getPressedLvlBased():
+	var arrayPressed = []
+	var btns = %lvl_based.get_child_count()
+	for btn in btns:
+		arrayPressed.append(%lvl_based.get_child(btn).button_pressed)
+	
+	return []
 
 func _on_map_option_item_selected(index):
 	setTime(0)
+	if (index == 10):
+		sectionNames = ["pl","loop"]
+		%section_option.clear()
+		%section_option.add_item("Pre-loop")
+		%section_option.add_item("Loop")
+	else:
+		sectionNames = ["i", "pls", "s1", "s2", "plkc", "kc"]
+		%section_option.clear()
+		for name in sectionFullNames:
+			%section_option.add_item(name)
+		
 	changeLevel(index)
 	checkBtns()
 	switchAudio()
@@ -594,34 +1015,120 @@ func _on_sect_change(index):
 	updDiscordRP()
 #	%playBtn.button_pressed = false
 
-func _on_forward_btn_pressed():
-	#print(%map_option.item_count, ": ", %map_option.selected)
-	if %map_option.item_count > %map_option.selected+1:
-		%map_option.select(%map_option.selected+1)
-	else:
-		%map_option.select(0)
-	_on_map_option_item_selected(%map_option.selected)
-	pass # Replace with function body.
+func getListCategory(_category): # Получить список "карт" и категории <_category>
+	for sub in struct["submenus"]:
+		if sub["title"] == _category:
+			print(sub["items"])
+			return sub["items"]
+
+func getNameFromMenu():
+	var mapMenu = %MenuButton
+	var menuText = mapMenu.text
+	if menuText == "":
+		var itemIcon = mapMenu.icon
+		var iconPath = itemIcon.resource_path.split("/")
+		menuText = iconPath[iconPath.size()-1].split(".")[0] 
+	return menuText
 	
-func _on_fast_btn_pressed():
-	#print(%section_option.item_count, ": ", %section_option.selected)
-	if %section_option.item_count > %section_option.selected+1:
-		%section_option.select(%section_option.selected+1)
-	else:
-		%section_option.select(0)
-	_on_sect_change(%section_option.selected)
+func mapMenuSelect(index):
+	var mapMenu = %MenuButton.get_popup() #Получим меню
+	for child in mapMenu.item_count: #Перебор дочерних элементов с целью поиска текущей категории
+		if mapMenu.get_item_text(child) == category: #Если это та категория в
+			var subMenu = mapMenu.get_child(child) #то поместить этот дочерний обьект в временую переменную
+			var itemName = subMenu.get_item_text(index) # Нужно найти ебучий имя
+			if itemName == "": # В случае если имени нет парсим иконку
+					var itemIcon = subMenu.get_item_icon(index)
+					var iconPath = itemIcon.resource_path.split("/")
+					itemName = iconPath[iconPath.size()-1].split(".")[0] 
+			newChangeMap(index, category) # вызвать нажатие на <index> элемент
+	
+func _on_forward_btn_pressed(): #Сменить карту на следующую 
+	var selectedIndex
+	var listCurrentCategory = []
+	listCurrentCategory = getListCategory(category) #Получили список карт
+	
+	var mapMenu = %MenuButton.get_popup() #Получим меню
+	for child in mapMenu.item_count: #Перебор дочерних элементов с целью поиска текущей категории
+		if mapMenu.get_item_text(child) == category: #Если это та категория в
+			var subMenu = mapMenu.get_child(child) #то поместить этот дочерний обьект в временую переменную
+			for item in subMenu.item_count: #перебор элементов выпадающего списка
+				var itemName = subMenu.get_item_text(item)
+				if itemName == "": # В случае если имени нет парсим иконку
+					var itemIcon = subMenu.get_item_icon(item)
+					var iconPath = itemIcon.resource_path.split("/")
+					itemName = iconPath[iconPath.size()-1].split(".")[0] 
+				print(itemName)
+				if itemName == getNameFromMenu():
+					selectedIndex = item
+					if subMenu.item_count > selectedIndex+1:
+						mapMenuSelect(selectedIndex+1)
+					else:
+						mapMenuSelect(0)
+					return
 	pass # Replace with function body.
 
-func _on_back_btn_pressed():
-	#print(%map_option.item_count, ": ", %map_option.selected)
-	if %map_option.selected > 0:
-		%map_option.select(%map_option.selected-1)
+var temp = null
+
+func _on_fast_btn_pressed():
+	if repeat == 3:
+		nextCustom(+1)
+		return 0
+	#print(%section_option.item_count, ": ", %section_option.selected)
+	if false and category == "Other":
+		_on_stop_btn_pressed()
+		var listPressed = lastPressedLvlBased
+		var newListPressed = []
+		for index in range((listPressed.size())):
+			if listPressed[index]:
+				listPressed[index] = false
+				if listPressed.size() > index+1:
+					listPressed[index+1] = true
+				else: 
+					listPressed[0] = true
+		newListPressed = listPressed
+		genLvlBasedBtn(newListPressed.size(), newListPressed)
 	else:
-		%map_option.select(%map_option.item_count-1)
-	_on_map_option_item_selected(%map_option.selected)
+		if %section_option.item_count > %section_option.selected+1:
+			%section_option.select(%section_option.selected+1)
+		else:
+			%section_option.select(0)
+		_on_sect_change(%section_option.selected)
+	
+	pass # Replace with function body.
+
+
+func _on_back_btn_pressed():
+	
+	var selectedIndex
+	var listCurrentCategory = []
+	listCurrentCategory = getListCategory(category) #Получили список карт
+	
+	var mapMenu = %MenuButton.get_popup() #Получим меню
+	for child in mapMenu.item_count: #Перебор дочерних элементов с целью поиска текущей категории
+		if mapMenu.get_item_text(child) == category: #Если это та категория в
+			var subMenu = mapMenu.get_child(child) #то поместить этот дочерний обьект в временую переменную
+			for item in subMenu.item_count: #перебор элементов выпадающего списка
+				var itemName = subMenu.get_item_text(item)
+				if itemName == "": # В случае если имени нет парсим иконку
+					var itemIcon = subMenu.get_item_icon(item)
+					var iconPath = itemIcon.resource_path.split("/")
+					itemName = iconPath[iconPath.size()-1].split(".")[0] 
+				print(itemName)
+				if itemName == getNameFromMenu():
+					selectedIndex = item
+					if selectedIndex-1 < 0:
+						mapMenuSelect(subMenu.item_count-1)
+					else:
+						mapMenuSelect(selectedIndex-1)
+					return
+	pass # Replace with function body.
 	pass # Replace with function body.
 	
 func _on_slow_btn_pressed():
+	if repeat == 3:
+		nextCustom(-1)
+		return 0
+	
 	#print(%section_option.item_count, ": ", %section_option.selected)
 	if %section_option.selected > 0:
 		%section_option.select(%section_option.selected-1)
@@ -739,12 +1246,23 @@ func addPreset(name):
 	preset["solo"] = solo
 	preset["debuffVol"] = debuffVol 
 	#Music Layers
+	preset["category"] = category
 	preset["map"] = map
 	preset["section"] = section
 	preset["btns"] = getBtns()
 	presets.append(preset)
 	saveFile(name, preset)
 	pass
+
+func arrEnabledChars():
+	var list = "" 
+	var soundList = %MasterAudio.get_children(false)
+	if soundList:
+		for char in soundList:
+			list += " "+char.name.split("_")[2]
+		return list
+	else:
+		return ""
 
 func getVolumeArr():
 	var volumes = {}
@@ -780,7 +1298,7 @@ func getBtns():
 	return pressedBtns
 
 func selectPreset(name):
-	#print("try select " + name)
+	print("try select " + name)
 	var preset = loadFile(name)
 	if preset == null:
 		return
@@ -788,11 +1306,36 @@ func selectPreset(name):
 	resetBtns("none")
 	clearAudio()
 	#Main settings
+	print_debug(preset)
+	#oldfix
+	if !preset.has("category"):
+		preset.category = "Full-DMS"
+	var _temp = preset.category;
+	if _temp == "fullDMS":
+		preset.category = "Full-DMS"
+		
+	print("fixed")
+	print_debug(preset)
+	category = preset.category
 	map = preset.map
 	section = preset.section
-	%map_option.select(arrMaps.split(" ").find(map))
-	%section_option.select(sectionNames.find(section))
-	changeLevel(arrMaps.split(" ").find(map))
+	
+	print_debug(%MenuButton)
+	var _index = 0;
+	var _i = 0
+	for submenu in struct["submenus"]:
+		if submenu.title == category:
+			break;
+		_i += 1;
+	_temp = struct["submenus"][_i]["items"]
+	print_debug(_temp)
+	_index = _temp.find(map)
+	mapMenuSelect(_index)
+	#%MenuButton.select(arrMaps.split(" ").find(map))
+	
+	%section_option.select(sectionNames.find(preset.section))
+	newChangeLevel(map)
+	#changeLevel(arrMaps.split(" ").find(map))
 
 	#additional settings
 	loadVolumeSettings(preset.volume)
@@ -822,23 +1365,26 @@ func loadVolumeSettings(volSettings):
 	var container = %VolumeMixer.get_children(false)
 	var chars = ("all idle static "+arrChar).split(" ")
 	var index = 0
+	var temp = 0
 	for char in chars:
-		container[index].get_child(1).value = volumes[char]
+		if volumes.find_key(char) != null:
+			temp = volumes[char]
+		container[index].get_child(1).value = temp
 		index+=1
 
 ###
-func saveFile(name, content):
-	print("Save somthing in " + path_presetsFiles+%PresetsPath.text + " as " + name + "\nContent: " + str(content))
-	var file = FileAccess.open(path_presetsFiles+%PresetsPath.text+name+".tfhp",FileAccess.WRITE)
+func saveFile(_name, content):
+	print("Save somthing in " + path_presetsFiles+%PresetsPath.text + " as " + _name + "\nContent: " + str(content))
+	var file = FileAccess.open(path_presetsFiles+%PresetsPath.text+_name+".tfhp",FileAccess.WRITE)
 	file.store_var(content)
 	file = null
 
-func loadFile(name):
-	print("Load somthing from " + path_presetsFiles+%PresetsPath.text + " as " + name)
-	var file = FileAccess.open(path_presetsFiles+%PresetsPath.text+name+".tfhp",FileAccess.READ)
+func loadFile(_name):
+	print("Load somthing from " + path_presetsFiles+%PresetsPath.text + " as " + _name)
+	var file = FileAccess.open(path_presetsFiles+%PresetsPath.text+_name+".tfhp",FileAccess.READ)
 	if file == null:
 		%AcceptDialog.position = get_screen_position()
-		%AcceptDialog.dialog_text = str(path_presetsFiles+%PresetsPath.text+name+".tfhp" + " not correct!")
+		%AcceptDialog.dialog_text = str(path_presetsFiles+%PresetsPath.text+_name+".tfhp" + " not correct!")
 		%AcceptDialog.visible = true
 	else:
 		var content = file.get_var()
@@ -856,7 +1402,7 @@ func reloadPresetList():
 	%LinkFolderPresets.uri = path_presetsFiles+%PresetsPath.text
 	var remList = %listPresets.get_child_count(false)
 	#print(range(remList-1, 1 , -1))
-	var remListAsObj = %listPresets.get_tree()
+	#var remListAsObj = %listPresets.get_tree()
 	for rem in range(remList-1, 0 , -1):
 		print_debug(%listPresets.get_child(rem))
 		%listPresets.get_child(rem).queue_free()
@@ -885,32 +1431,32 @@ func reloadPresetList():
 		
 	for elem in getListFilePresets():
 		var preset_elem = HBoxContainer.new()
-		var name = elem.split(".tfhp")[0]
+		var _name = elem.split(".tfhp")[0]
 		
 		var preset_button = Button.new()
 		preset_button.icon = load("res://src/img/ui/additions/files.png")
-		preset_button.text = name
+		preset_button.text = _name
 		preset_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		preset_button.button_up.connect(selectPreset.bind(name))
+		preset_button.button_up.connect(selectPreset.bind(_name))
 		preset_elem.add_child(preset_button)
 		
 		var preset_editBtn = TextureButton.new()
 		preset_editBtn.size_flags_horizontal = Control.SIZE_SHRINK_END
 		preset_editBtn.texture_normal = load("res://src/img/ui/icons/repeat.png")
-		preset_editBtn.button_up.connect(editPreset.bind(name))
+		preset_editBtn.button_up.connect(editPreset.bind(_name))
 		preset_elem.add_child(preset_editBtn)
 		
 		var preset_remBtn = TextureButton.new()
 		preset_remBtn.size_flags_horizontal = Control.SIZE_SHRINK_END
 		preset_remBtn.texture_normal = load("res://src/img/ui/icons/circle_off.png")
-		preset_remBtn.button_up.connect(removePreset.bind(name))
+		preset_remBtn.button_up.connect(removePreset.bind(_name))
 		preset_elem.add_child(preset_remBtn)
 		
 		%listPresets.add_child(preset_elem)
 	
-func editPreset(name):
-	removePreset(name)
-	addPreset(name)
+func editPreset(_name):
+	removePreset(_name)
+	addPreset(_name)
 	reloadPresetList()
 
 func saveSettings(content):
@@ -985,6 +1531,12 @@ func _on_btn_select_folder_pressed():
 		%PresetsPath.text = "/"
 		reloadPresetList()
 		%popup_changeFolderPresets.visible = false
+	else: 
+		var confPop = ConfirmationDialog.new()
+		get_node(".").add_child(confPop)
+		confPop.dialog_text = "Путь хуйня!"
+		confPop.remove_button(confPop.get_cancel_button())
+		confPop.popup_centered()
 	pass # Replace with function body.
 
 
@@ -1013,13 +1565,13 @@ func discordAPI():
 	# Application ID
 	discord_sdk.app_id = 1142132069162565682
 	# this is boolean if everything worked
-#	print("Discord working: " + str(discord_sdk.get_is_discord_working()))
+	print("Discord working: " + str(discord_sdk.get_is_discord_working()))
 	# Set the first custom text row of the activity here
 	discord_sdk.details = "Enjoying good music!"
-#	print(discord_sdk.details)
+	print(discord_sdk.details)
 	# Set the second custom text row of the activity here
 	discord_sdk.state = getFullName(map) + " | " + sectionFullNames[sectionNames.find(section)]
-#	print(discord_sdk.state)
+	print(discord_sdk.state)
 	# Image key for small image from "Art Assets" from the Discord Developer website
 	discord_sdk.large_image = "albumlogo"
 	# Tooltip text for the large image
@@ -1027,10 +1579,40 @@ func discordAPI():
 	# Image key for large image from "Art Assets" from the Discord Developer website
 	discord_sdk.small_image = map
 ##     # Tooltip text for the small image
-	discord_sdk.small_image_text = getFullName(map)
-#	print(discord_sdk.small_image_text)
+	discord_sdk.small_image_text = getFullName(map) #Fix
+	print(discord_sdk.small_image_text)
 ##     # "02:41 elapsed" timestamp for the activity
 	discord_sdk.start_timestamp = int(Time.get_unix_time_from_system()) + time
 ##     # Always refresh after changing the values!
 	print("Upd!")
 	discord_sdk.refresh()
+
+
+func _on_button_toggled(button_pressed):
+	%orderListPanel.visible = button_pressed
+	pass # Replace with function body.
+
+func getChildElem(_parent, _childName):
+	for _child in _parent.get_children():
+		if _child.name == _childName:
+			return _child
+	return null 
+
+func switchCustomList (_btn, _name): #Меняет состояние
+	var _i = 0
+	for _elem in repeatCustomList:
+		if _name == _elem.name:
+			repeatCustomList[_i].state = _btn
+			break
+		_i += 1
+		
+	print_debug(repeatCustomList)
+
+func _on_order_list_panel_visibility_changed():
+	genOrderList()
+	pass # Replace with function body.
+
+
+func _on_section_option_ready():
+	%section_option.get_popup().transparent_bg = true
+	pass # Replace with function body.
