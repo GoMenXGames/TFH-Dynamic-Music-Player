@@ -32,7 +32,7 @@ _The work has been started since the beginning of April 2023_
 - HDD: 3GB+ (SSD for Faster Launch) (Most of the program's size is occupied by music files)
 
 ## Download:
--  [Google Drive](https://drive.google.com/drive/folders/1e-sJHB-511NZR43Xj7vNI6uiOwyd2lsa?usp=drive_link)
+-  [Google Drive](https://drive.google.com/drive/folders/1e-sJHB-511NZR43Xj7vNI6uiOwyd2lsa?usp=drive_link) Lastest version is 2.0.1
 
 ## Video
 
