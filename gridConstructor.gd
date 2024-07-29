@@ -236,13 +236,15 @@ func _ready():
 	%LinkFolderPresets.uri = path_presetsFiles
 	print_debug(getListFilePresets())
 	
+	
 func getFolder():
 	pass
 	
 func _notification(what):
 	match what:
 		NOTIFICATION_WM_CLOSE_REQUEST:
-			discord_sdk.clear()
+			#discord_sdk.clear()
+			pass
 		NOTIFICATION_APPLICATION_FOCUS_IN:
 			reloadPresetList()
 			pass
@@ -388,7 +390,7 @@ func getTime():
 	return strTime
 
 func getNameSect(id): #Получить имя перса по имини
-	if (map == "canyon"):
+	if (map == "canyon" or map == "training"):
 		var _test = %section_option.get_item_text(id)
 		return sectionNames[sectionFullNamesTraining.find(_test)]
 	elif (category == "Other"):
@@ -575,7 +577,7 @@ func checkBtns():
 			btn.disabled = false
 		elif section == "lvlBased":
 			btn.disabled = false
-		elif map == "canyon":
+		elif map == "canyon" or map == "training":
 			btn.disabled = false
 		else:
 			btn.disabled = true
@@ -934,7 +936,7 @@ func newChangeMap(id, _category):
 				
 	%MenuButton.text = ""
 	var icon = null;
-	if (FileAccess.file_exists("res://src/img/icons/mini/" + _map + ".png")):
+	if (FileAccess.file_exists("res://src/img/icons/mini/" + _map + ".png.import")):
 		icon = load("res://src/img/icons/mini/" + _map + ".png")
 	%MenuButton.icon = icon
 	if %MenuButton.icon == null:
@@ -1561,31 +1563,32 @@ func updDiscordRP():
 		discordAPI()
 
 func discordAPI():
-	discord_sdk.clear()
-	# Application ID
-	discord_sdk.app_id = 1142132069162565682
-	# this is boolean if everything worked
-	print("Discord working: " + str(discord_sdk.get_is_discord_working()))
-	# Set the first custom text row of the activity here
-	discord_sdk.details = "Enjoying good music!"
-	print(discord_sdk.details)
-	# Set the second custom text row of the activity here
-	discord_sdk.state = getFullName(map) + " | " + sectionFullNames[sectionNames.find(section)]
-	print(discord_sdk.state)
-	# Image key for small image from "Art Assets" from the Discord Developer website
-	discord_sdk.large_image = "albumlogo"
-	# Tooltip text for the large image
-	discord_sdk.large_image_text = "TFH: Dynamic Music Player"
-	# Image key for large image from "Art Assets" from the Discord Developer website
-	discord_sdk.small_image = map
-##     # Tooltip text for the small image
-	discord_sdk.small_image_text = getFullName(map) #Fix
-	print(discord_sdk.small_image_text)
-##     # "02:41 elapsed" timestamp for the activity
-	discord_sdk.start_timestamp = int(Time.get_unix_time_from_system()) + time
-##     # Always refresh after changing the values!
-	print("Upd!")
-	discord_sdk.refresh()
+#	discord_sdk.clear()
+#	# Application ID
+#	discord_sdk.app_id = 1142132069162565682
+#	# this is boolean if everything worked
+#	print("Discord working: " + str(discord_sdk.get_is_discord_working()))
+#	# Set the first custom text row of the activity here
+#	discord_sdk.details = "Enjoying good music!"
+#	print(discord_sdk.details)
+#	# Set the second custom text row of the activity here
+#	discord_sdk.state = getFullName(map) + " | " + sectionFullNames[sectionNames.find(section)]
+#	print(discord_sdk.state)
+#	# Image key for small image from "Art Assets" from the Discord Developer website
+#	discord_sdk.large_image = "albumlogo"
+#	# Tooltip text for the large image
+#	discord_sdk.large_image_text = "TFH: Dynamic Music Player"
+#	# Image key for large image from "Art Assets" from the Discord Developer website
+#	discord_sdk.small_image = map
+###     # Tooltip text for the small image
+#	discord_sdk.small_image_text = getFullName(map) #Fix
+#	print(discord_sdk.small_image_text)
+###     # "02:41 elapsed" timestamp for the activity
+#	discord_sdk.start_timestamp = int(Time.get_unix_time_from_system()) + time
+###     # Always refresh after changing the values!
+#	print("Upd!")
+#	discord_sdk.refresh()
+	pass
 
 
 func _on_button_toggled(button_pressed):
@@ -1609,7 +1612,7 @@ func switchCustomList (_btn, _name): #Меняет состояние
 	print_debug(repeatCustomList)
 
 func _on_order_list_panel_visibility_changed():
-	genOrderList()
+	
 	pass # Replace with function body.
 
 
